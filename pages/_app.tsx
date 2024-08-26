@@ -1,5 +1,4 @@
 import type { ReactElement, ReactNode } from 'react';
-
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -13,6 +12,9 @@ import createEmotionCache from 'src/createEmotionCache';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { SnackbarProvider } from '@/contexts/SnackbarContext';
+
+import '../Pages/global.css'
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -43,12 +45,14 @@ function TokyoApp(props: TokyoAppProps) {
         />
       </Head>
       <SidebarProvider>
-        <ThemeProvider>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
-          </LocalizationProvider>
-        </ThemeProvider>
+        <SnackbarProvider>
+          <ThemeProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <CssBaseline />
+              {getLayout(<Component {...pageProps} />)}
+            </LocalizationProvider>
+          </ThemeProvider>
+        </SnackbarProvider>
       </SidebarProvider>
     </CacheProvider>
   );

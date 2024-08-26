@@ -32,7 +32,7 @@ import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwo
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
-
+import PanoramaIcon from '@mui/icons-material/Panorama';
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
   .MuiList-root {
@@ -183,7 +183,7 @@ function SidebarMenu() {
   return (
     <>
       <MenuWrapper>
-        <List component="div">
+        {/* <List component="div">
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
@@ -531,6 +531,64 @@ function SidebarMenu() {
                     startIcon={<WorkspacePremiumTwoToneIcon />}
                   >
                     Maintenance
+                  </Button>
+                </NextLink>
+              </ListItem>
+            </List>
+          </SubMenuWrapper>
+        </List> */}
+        <List
+          component="div"
+          subheader={
+            <ListSubheader component="div" disableSticky>
+              Páginas dinámicas
+            </ListSubheader>
+          }
+        >
+          <SubMenuWrapper>
+            <List component="div">
+              <ListItem component="div">
+                <NextLink href="/paginas" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/paginas' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<BrightnessLowTwoToneIcon />}
+                  >
+                    Páginas
+                  </Button>
+                </NextLink>
+              </ListItem>
+              <ListItem component="div">
+                <NextLink href="/applications/messenger" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/applications/messenger' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<MmsTwoToneIcon />}
+                  >
+                    Recursos
+                  </Button>
+                </NextLink>
+              </ListItem>
+              <ListItem component="div">
+                <NextLink href="/applications/messenger" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/applications/messenger' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<PanoramaIcon />}
+                  >
+                    Banners
                   </Button>
                 </NextLink>
               </ListItem>

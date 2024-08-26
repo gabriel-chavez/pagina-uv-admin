@@ -1,0 +1,36 @@
+.mdxeditor-popup-container {
+  position: relative !important;
+  z-index: 10000 !important;
+  /* Asegura que el toolbar tenga un alto índice z para estar encima de otros elementos */
+}
+
+.css-1gf5lq2-MuiTypography-root-MuiDialogTitle-root {
+  font-size: 1.5em !important;
+
+  font-weight: bold !important;
+  
+}
+.css-pqw1f0-MuiTypography-root-MuiDialogContentText-root {
+  margin: 0px !important;
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.00938em !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+.css-al6rg6-MuiButtonGroup-root .MuiButtonGroup-grouped:not(:last-of-type) {
+
+  border-color: rgba(82, 82, 82, 0.178) !important;
+}
+.css-h9f53t-MuiBackdrop-root-MuiModal-backdrop.MuiBackdrop-invisible {
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(0px) !important;
+  backdrop-filter: blur(0px) !important;
+}
+.css-gbjsxz-MuiBackdrop-root-MuiDialog-backdrop {
+  
+  -webkit-backdrop-filter: blur(0px) !important;
+  backdrop-filter: blur(0px) !important;
+
+}

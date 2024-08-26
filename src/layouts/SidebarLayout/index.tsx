@@ -55,6 +55,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
             }
           }}
         >
+          
           <Box display="block">{children}</Box>
         </Box>
       </Box>

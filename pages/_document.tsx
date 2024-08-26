@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400&display=swap"
           />
         </Head>
-        <body>
+        <body>         
           <Main />
           <NextScript />
         </body>
