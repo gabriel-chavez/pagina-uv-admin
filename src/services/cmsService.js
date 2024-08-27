@@ -84,6 +84,15 @@ export const actualizarDatos = async (id,data) => {
         throw error;
     }
 };
+export const eliminarDatos = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/Datos/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
 /*MENU*/
 export const obtenerMenu = async () => {
     try {

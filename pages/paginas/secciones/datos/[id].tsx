@@ -8,6 +8,8 @@ import {
   CardHeader,
   Divider,
   Box,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 
 import Button from '@mui/material/Button';
@@ -25,7 +27,7 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import Footer from '@/components/Footer';
 import SeccionTableConjuntoDatos from '@/content/paginas/secciones/SeccionTableConjuntoDatos';
 import Editor from '@/utils/MdxEditor';
-import { actualizarDatos, crearDatos, obtenerDatosPorSeccion } from '@/services/cmsService';
+import { actualizarDatos, crearDatos, eliminarDatos, obtenerDatosPorSeccion } from '@/services/cmsService';
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import VisorDeArchivos from '@/utils/VisorDeArchivos';
@@ -157,10 +159,29 @@ const Seccion = () => {
 
     setOpen(true);
   };
+  const handleEliminar = async (id) => {
+   
+    try {
+      let respuesta;
+      if (id) {
+        respuesta = await eliminarDatos(id);
+        console.log(respuesta)
+
+        openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
+        handleConfirmClose();
+        // setOpen(false);
+        reset();
+        fetchSecciones();
+      }
+    } catch (error) {
+      console.error("Error al guardar los datos:", error);
+      openSnackbar('Error al guardar los datos', 'error');
+    }
+  };
 
   const handleClose = () => {
     setOpen(false);
-    reset(); 
+    reset();
   };
 
   const onSubmit = (datos) => {
@@ -239,6 +260,7 @@ const Seccion = () => {
                 <SeccionTableConjuntoDatos
                   conjuntosDatos={fila}
                   btnEditarAgregar={(id) => handleModalCrearEditar(id, filaIndex)}
+                  btnEliminar={(id) => handleEliminar(id)}
                 />
               </Card>
             </Grid>
@@ -258,14 +280,19 @@ const Seccion = () => {
             <DialogContentText>
               Ingresa los datos del formulario para agregar una sección
             </DialogContentText>
+
             <Box mt={2}>
-              <Controller
-                name="datoTexto"
-                control={control}
-                render={({ field }) => (
-                  <Editor value={field.value ?? ''} onChange={field.onChange} />
-                )}
-              />
+              <FormControl fullWidth margin="dense">
+                <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Texto</FormLabel>
+                <Controller
+                  name="datoTexto"
+                  control={control}
+                  render={({ field }) => (
+                    <Editor value={field.value ?? ''} onChange={field.onChange} />
+                  )}
+                />
+              </FormControl>
+
             </Box>
             <Controller
               name="datoUrl"

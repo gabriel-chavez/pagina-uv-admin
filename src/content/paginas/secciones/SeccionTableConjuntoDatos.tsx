@@ -15,11 +15,12 @@ import {
   
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete'; 
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
-const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar }) => {
+const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnEliminar }) => {
   const [items, setItems] = useState([]);
   const [mounted, setMounted] = useState(false);
 
@@ -108,6 +109,19 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar }) => {
                                   >
                                     Editar
                                   </Button>
+
+                                </Tooltip>
+                                <Tooltip placement="top" title="Eliminar" arrow>
+                                  <Button
+                                    color="inherit"
+                                    size="small"
+                                    variant="text"
+                                    startIcon={<DeleteIcon  fontSize="small" />}
+                                    onClick={() => btnEliminar(conjunto.id)}
+                                  >
+                                    Eliminar
+                                  </Button>
+
                                 </Tooltip>
                                 <Tooltip placement="top" title="Ordenar" arrow>
                                   <IconButton {...provided.dragHandleProps}>

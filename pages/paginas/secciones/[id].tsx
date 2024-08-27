@@ -19,6 +19,9 @@ import {
   Checkbox,
   MenuItem,
   FormControl,
+  Box,
+  Typography,
+  FormLabel,
 } from '@mui/material';
 
 import SidebarLayout from '@/layouts/SidebarLayout';
@@ -30,6 +33,8 @@ import SeccionTable from '@/content/paginas/secciones/SecionTable';
 import { actualizarSeccion, crearSeccion, obtenerSecciones, obtenerTipoSeccion } from '@/services/cmsService';
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
+import Editor from '@/utils/MdxEditor';
+import { Label } from '@mui/icons-material';
 
 export async function getServerSideProps() {
   try {
@@ -95,7 +100,7 @@ const Seccion = ({ tipoSeccion }) => {
     setValue('titulo', titulo);
     setValue('subTitulo', subTitulo);
     setValue('clase', clase);
-    setValue('paginaDinamicaId', paginaDinamicaId); 
+    setValue('paginaDinamicaId', paginaDinamicaId);
     setValue('orden', orden);
     setValue('habilitado', habilitado);
     setDialogTitle(id ? 'Editar' : 'Crear');
@@ -104,11 +109,11 @@ const Seccion = ({ tipoSeccion }) => {
 
   const handleClose = (event: React.SyntheticEvent, reason?: string) => {
     if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
-        return;
+      return;
     }
     setOpen(false);
     reset();
-};
+  };
 
   const onSubmit = (datos) => {
     setFormData(datos);
@@ -127,7 +132,7 @@ const Seccion = ({ tipoSeccion }) => {
       } else {
         respuesta = await crearSeccion(formData);
       }
-     
+
       openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
       handleConfirmClose();
       setOpen(false);
@@ -174,7 +179,7 @@ const Seccion = ({ tipoSeccion }) => {
               <SeccionTable
                 secciones={secciones}
                 onEdit={(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado) => handleModalAgregarEditar(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado)}
-               
+
                 onView={handleVerDatos}
               />
             </Card>
@@ -192,6 +197,52 @@ const Seccion = ({ tipoSeccion }) => {
             <DialogContentText>
               Ingresa los datos del formulario para agregar una sección
             </DialogContentText>
+
+
+            <Controller
+              name="nombre"
+              control={control}
+              rules={{ required: 'Nombre de la sección es requerido' }}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  autoFocus
+                  margin="dense"
+                  label="Nombre de sección"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  error={!!fieldState.error}
+                  helperText={fieldState.error ? fieldState.error.message : ''}
+                />
+              )}
+            />
+
+
+            <Box mt={2}>
+              <FormControl fullWidth margin="dense">
+                <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Título</FormLabel>
+                <Controller
+                  name="titulo"
+                  control={control}
+                  render={({ field }) => (
+                    <Editor value={field.value ?? ''} onChange={field.onChange} />
+                  )}
+                />
+              </FormControl>
+            </Box>
+            <Box mt={2}>
+              <FormControl fullWidth margin="dense">
+                <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Subtítulo</FormLabel>
+                <Controller
+                  name="subTitulo"
+                  control={control}
+                  render={({ field }) => (
+                    <Editor value={field.value ?? ''} onChange={field.onChange} />
+                  )}
+                />
+              </FormControl>
+            </Box>
             <FormControl fullWidth margin="dense">
               <Controller
                 name="catTipoSeccionId"
@@ -219,59 +270,6 @@ const Seccion = ({ tipoSeccion }) => {
                 )}
               />
             </FormControl>
-
-            <Controller
-              name="nombre"
-              control={control}
-              rules={{ required: 'Nombre de la sección es requerido' }}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  autoFocus
-                  margin="dense"
-                  label="Nombre de sección"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  error={!!fieldState.error}
-                  helperText={fieldState.error ? fieldState.error.message : ''}
-                />
-              )}
-            />
-
-            <Controller
-              name="titulo"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  margin="dense"
-                  label="Título"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  error={!!fieldState.error}
-                  helperText={fieldState.error ? fieldState.error.message : ''}
-                />
-              )}
-            />
-
-            <Controller
-              name="subTitulo"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  margin="dense"
-                  label="Subtítulo"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  error={!!fieldState.error}
-                  helperText={fieldState.error ? fieldState.error.message : ''}
-                />
-              )}
-            />
 
             <Controller
               name="clase"

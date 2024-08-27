@@ -113,7 +113,7 @@ const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
     <Box sx={{ padding: 3 }}>
       <Card sx={{ marginBottom: 2, padding: 0}}>
         <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">Archivo seleccionado</Typography>
+          <Typography variant="h6">Recurso seleccionado</Typography>
           <Box>
             {isImage(selectedFile) && (
               <Tooltip title="Vista Previa">

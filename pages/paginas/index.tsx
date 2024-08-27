@@ -49,7 +49,7 @@ export async function getServerSideProps() {
     }
 }
 
-const ApplicationsTransactions = ({ paginasDinamicas: initialPaginasDinamicas }) => {
+const Pagina = ({ paginasDinamicas: initialPaginasDinamicas }) => {
     const router = useRouter();
     const [paginasDinamicas, setPaginasDinamicas] = useState(initialPaginasDinamicas);
     const [open, setOpen] = useState(false);
@@ -107,24 +107,22 @@ const ApplicationsTransactions = ({ paginasDinamicas: initialPaginasDinamicas })
     };
 
     const handleConfirmSubmit = async () => {
-        try {
-            console.log(formData)
+        try {            
             let respuesta;
             if (formData.id) {
                 respuesta = await actualizarMenu(formData.id, formData);
             } else {
                 respuesta = await crearMenu(formData);
-            }
-            console.log(respuesta);
-            openSnackbar(respuesta.mensaje || 'Operación exitosa');
-            handleConfirmClose();
-            setOpen(false);
-            reset();
+            }            
+            openSnackbar(respuesta.mensaje);                                
             fetchPaginasDinamicas();
 
-        } catch (error) {
-            console.error("Error al guardar la página dinámica:", error);
+        } catch (error) {            
             openSnackbar('Error al guardar la página dinámica', 'error');
+        } finally{
+            setOpen(false);
+            setFormData(null);
+            setOpenConfirmation(false);
         }
     };
 
@@ -163,6 +161,7 @@ const ApplicationsTransactions = ({ paginasDinamicas: initialPaginasDinamicas })
                                     paginas={paginasDinamicas}
                                     onClickModalAgregarEditar={(id, nombre, habilitado) => handleModalAgregarEditar(id, nombre, habilitado)}
                                     onClickSecciones={handleSecciones}
+                                    onClickEditarBanner={handleSecciones}
                                 />
                             </CardContent>
                         </Card>
@@ -241,8 +240,8 @@ const ApplicationsTransactions = ({ paginasDinamicas: initialPaginasDinamicas })
     );
 };
 
-ApplicationsTransactions.getLayout = (page) => (
+Pagina.getLayout = (page) => (
     <SidebarLayout>{page}</SidebarLayout>
 );
 
-export default ApplicationsTransactions;
+export default Pagina;

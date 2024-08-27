@@ -17,6 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
 const SeccionTable = ({ secciones, onEdit, onView }) => {
     const [items, setItems] = useState([]);
@@ -54,11 +55,12 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                 <TableHead>
                                     <TableRow>
 
-                                        <TableCell>Tipo de Sección</TableCell>
+                                       
 
                                         <TableCell>Nombre</TableCell>
                                         <TableCell>Título</TableCell>
                                         <TableCell>Subtítulo</TableCell>
+                                        <TableCell>Tipo de Sección</TableCell>
                                         <TableCell>Clase</TableCell>
                                         <TableCell>Habilitado</TableCell>
                                         <TableCell align="right">Acciones</TableCell>
@@ -74,11 +76,15 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                                     {...provided.draggableProps}
                                                 >
 
-                                                    <TableCell>{seccion.catTipoSeccion.nombre}</TableCell>
-
+                                                    
                                                     <TableCell>{seccion.nombre}</TableCell>
-                                                    <TableCell>{seccion.titulo}</TableCell>
-                                                    <TableCell>{seccion.subTitulo}</TableCell>
+                                                    <TableCell>
+                                                        <MarkdownRenderer content={seccion.titulo} />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <MarkdownRenderer content={seccion.subTitulo} />
+                                                    </TableCell>              
+                                                    <TableCell>{seccion.catTipoSeccion.nombre}</TableCell>                                      
                                                     <TableCell>{seccion.clase}</TableCell>
                                                     <TableCell>
                                                         {seccion.habilitado ? 'Habilitado' : 'Deshabilitado'}

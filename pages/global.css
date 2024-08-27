@@ -34,3 +34,6 @@
   backdrop-filter: blur(0px) !important;
 
 }
+.mdxeditor{
+  background-color: #cccccc17;
+}
