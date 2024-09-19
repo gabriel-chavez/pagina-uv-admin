@@ -8,6 +8,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Typography, Dialog, IconButton, Tooltip, Card, CardContent } from '@mui/material';
 
 const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
+  
   const [currentFolder, setCurrentFolder] = useState('assets');
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false); // Estado para el modal de vista previa
@@ -166,7 +167,7 @@ const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
       <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
         <Grid container spacing={1}>
           {folders.map(folder => (
-            <Grid item xs={2.4} key={folder}>
+            <Grid item xs={6} md={3} key={folder}>
               <Box sx={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleFolderClick(folder)}>
                 <FolderIcon sx={{ fontSize: 60, color: '#FFB74D' }} />
                 <Typography variant="h6">{folder}</Typography>
@@ -174,7 +175,7 @@ const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
             </Grid>
           ))}
           {filteredArchivos.map(archivo => (
-            <Grid item xs={2.4} key={archivo.id}>
+            <Grid item xs={6} md={3} key={archivo.id}>
               <Box
                 data-file-id={archivo.recursoEscritorio}
                 sx={{

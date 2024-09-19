@@ -10,15 +10,19 @@ import {
   Box,
   FormControl,
   FormLabel,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@mui/material';
-
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 
 import SidebarLayout from '@/layouts/SidebarLayout';
 import Head from 'next/head';
@@ -27,75 +31,50 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import Footer from '@/components/Footer';
 import SeccionTableConjuntoDatos from '@/content/paginas/secciones/SeccionTableConjuntoDatos';
 import Editor from '@/utils/MdxEditor';
-import { actualizarDatos, crearDatos, eliminarDatos, obtenerDatosPorSeccion } from '@/services/cmsService';
+import {
+  actualizarDatos,
+  crearDatos,
+  eliminarDatos,
+  obtenerDatosPorSeccion,
+  obtenerRecursos,
+  obtenerSeccion
+} from '@/services/cmsService';
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import VisorDeArchivos from '@/utils/VisorDeArchivos';
-const imageData = [
 
-  {
-    "nombre": "baner prueba",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/backgrounds/page-header-bg.jpg",
-    "bannerPagina": [],
-    "id": 1
-  },
-  {
-    "nombre": "Compra soat",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/compra-web.doc",
-    "bannerPagina": [],
-    "id": 2
-  },
-  {
-    "nombre": "Descarga App",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/unividaapp.jpg",
-    "bannerPagina": [],
-    "id": 3
-  },
-  {
-    "nombre": "Puntos de venta",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/puntos.jpg",
-    "bannerPagina": [],
-    "id": 4
-  },
-  {
-    "nombre": "Redes sociales",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/facebook-whatsapp.jpg",
-    "bannerPagina": [],
-    "id": 5
-  },
-  {
-    "nombre": "Precios SOAT",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/precios-soat.jpg",
-    "bannerPagina": [],
-    "id": 6
-  },
-  {
-    "nombre": "Datos SOAT",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/datos-vehiculo.jpg",
-    "bannerPagina": [],
-    "id": 7
-  },
-  {
-    "nombre": "Comprobante SOAT",
-    "catTipoRecursoId": 1,
-    "recursoEscritorio": "/assets/images/soat/comprobante-soat.jpg",
-    "bannerPagina": [],
-    "id": 8
-  }
+interface CatTipoSeccion {
+  nombre: string;
+  descripcion: string;
+  imagenSeccion: string;
+  imagenSeccionGuia: string;
+  habilitado: boolean;
+  id: number;
+}
 
-];
+interface Seccion {
+  catTipoSeccionId: number;
+  nombre: string;
+  titulo: string;
+  subTitulo: string;
+  clase: string;
+  paginaDinamicaId: number;
+  orden: number;
+  habilitado: boolean;
+  catTipoSeccion: CatTipoSeccion;
+  id: number;
+  fechaModificacion: string;
+}
+
 const Seccion = () => {
   const { openSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState<Seccion | null>(null);
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [openConfirmationDelete, setOpenConfirmationDelete] = useState(false);
+  const [idToDelete, setIdToDelete] = useState<number | null>(null); // Estado separado para la eliminación
+  const [listaDeRecursos, setListaDeRecursos] = useState([]);
+  const [informacionSeccion, setInformacionSeccion] = useState<Seccion | null>(null);
   const [datos, setDatos] = useState([]);
   const router = useRouter();
   const { id: seccionId } = router.query;
@@ -113,7 +92,20 @@ const Seccion = () => {
     },
   });
 
-  const selectedRecursoId = watch('recursoId'); // Obtenemos el valor de recursoId usando watch
+  const selectedRecursoId = watch('recursoId');
+
+  useEffect(() => {
+    const cargarRecursos = async () => {
+      try {
+        const recursos = await obtenerRecursos();
+        setListaDeRecursos(recursos);
+      } catch (error) {
+        console.error("Error al cargar recursos:", error);
+      }
+    };
+
+    cargarRecursos();
+  }, []);
 
   const fetchSecciones = async () => {
     try {
@@ -124,9 +116,19 @@ const Seccion = () => {
     }
   };
 
+  const cargarInformacionSeccion = async () => {
+    try {
+      const seccion = await obtenerSeccion(seccionId);
+      setInformacionSeccion(seccion);
+    } catch (error) {
+      console.error("Error al cargar información de sección:", error);
+    }
+  };
+
   useEffect(() => {
     if (seccionId) {
       fetchSecciones();
+      cargarInformacionSeccion();
     }
   }, [seccionId]);
 
@@ -159,25 +161,6 @@ const Seccion = () => {
 
     setOpen(true);
   };
-  const handleEliminar = async (id) => {
-   
-    try {
-      let respuesta;
-      if (id) {
-        respuesta = await eliminarDatos(id);
-        console.log(respuesta)
-
-        openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
-        handleConfirmClose();
-        // setOpen(false);
-        reset();
-        fetchSecciones();
-      }
-    } catch (error) {
-      console.error("Error al guardar los datos:", error);
-      openSnackbar('Error al guardar los datos', 'error');
-    }
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -194,6 +177,16 @@ const Seccion = () => {
 
   const handleConfirmClose = () => {
     setOpenConfirmation(false);
+  };
+
+  const handleConfirmDeleteClose = () => {
+    setOpenConfirmationDelete(false);
+    setIdToDelete(null); // Resetea el ID después de cerrar el diálogo
+  };
+
+  const handleConfirmDeleteOpen = (id: number) => {
+    setIdToDelete(id); // Establece el ID para eliminar
+    setOpenConfirmationDelete(true);
   };
 
   const handleConfirmSubmit = async () => {
@@ -215,6 +208,21 @@ const Seccion = () => {
     }
   };
 
+  const handleConfirmDeleteSubmit = async () => {
+    if (idToDelete !== null) {
+      try {
+        const respuesta = await eliminarDatos(idToDelete);
+        openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
+        reset();
+        handleConfirmDeleteClose();
+        fetchSecciones();
+      } catch (error) {
+        console.error("Error al eliminar los datos:", error);
+        openSnackbar('Error al eliminar los datos', 'error');
+      }
+    }
+  };
+
   const obtenerColumna = (fila) => {
     const rowArray = datos.find(array => array.some(item => item.fila === fila));
     if (!rowArray) return 0;
@@ -228,7 +236,7 @@ const Seccion = () => {
   };
 
   const handleFileSelect = (recursoId) => {
-    setValue('recursoId', recursoId); // Actualiza el valor de recursoId en el formulario
+    setValue('recursoId', recursoId);
   };
 
   return (
@@ -244,7 +252,46 @@ const Seccion = () => {
           onCreate={() => handleModalCrearEditar(null, datos.length)}
         />
       </PageTitleWrapper>
+
       <Container maxWidth="lg">
+        <Grid item xs={12} sx={{ mb: 2 }}>
+          <Card>
+            <List>
+              <ListItem sx={{ p: 3 }}>
+                <ListItemAvatar>
+                  <ViewQuiltIcon fontSize="large" />
+                </ListItemAvatar>
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
+                  secondaryTypographyProps={{
+                    variant: 'subtitle2',
+                    lineHeight: 1
+                  }}
+                  primary={informacionSeccion?.catTipoSeccion?.nombre || 'Nombre no disponible'}
+                  secondary={informacionSeccion?.catTipoSeccion?.descripcion || 'Descripción no disponible'}
+                />
+                <Button
+                  component="a"
+                  href={informacionSeccion?.catTipoSeccion?.imagenSeccionGuia
+                    ? `/${informacionSeccion.catTipoSeccion.imagenSeccionGuia.replace(/\\/g, '/')}`
+                    : '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="contained"
+                  color="secondary"
+                  onClick={(e) => {
+                    if (!informacionSeccion?.catTipoSeccion?.imagenSeccionGuia) {
+                      e.preventDefault();
+                      alert('No hay imagen disponible para mostrar.');
+                    }
+                  }}
+                >
+                  Ver ejemplo
+                </Button>
+              </ListItem>
+            </List>
+          </Card>
+        </Grid>
         <Grid
           container
           direction="row"
@@ -260,7 +307,7 @@ const Seccion = () => {
                 <SeccionTableConjuntoDatos
                   conjuntosDatos={fila}
                   btnEditarAgregar={(id) => handleModalCrearEditar(id, filaIndex)}
-                  btnEliminar={(id) => handleEliminar(id)}
+                  btnEliminar={(id) => handleConfirmDeleteOpen(id)}
                 />
               </Card>
             </Grid>
@@ -309,9 +356,9 @@ const Seccion = () => {
               )}
             />
             <VisorDeArchivos
-              archivos={imageData}
+              archivos={listaDeRecursos}
               onSelect={handleFileSelect}
-              selectedRecursoId={selectedRecursoId} // Selección inicial basada en el valor de useForm
+              selectedRecursoId={selectedRecursoId}
             />
           </DialogContent>
           <Box
@@ -339,6 +386,13 @@ const Seccion = () => {
         handleConfirm={handleConfirmSubmit}
         title="Confirmar"
         content={`¿Estás seguro de que deseas agregar una fila?`}
+      />
+      <ConfirmationDialog
+        open={openConfirmationDelete}
+        handleClose={handleConfirmDeleteClose}
+        handleConfirm={handleConfirmDeleteSubmit}
+        title="Confirmar eliminación"
+        content={`¿Estás seguro de que deseas eliminar esta fila?`}
       />
     </>
   );

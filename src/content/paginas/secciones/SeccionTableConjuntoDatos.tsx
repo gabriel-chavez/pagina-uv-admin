@@ -77,6 +77,7 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                 <Table>
                   <TableHead>
                     <TableRow>
+                    <TableCell>Nro.</TableCell>
                       <TableCell>Texto</TableCell>
                       <TableCell>Url</TableCell>
                       <TableCell>Recurso</TableCell>
@@ -92,6 +93,7 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                           >
+                            <TableCell>{index + 1}</TableCell>
                             <TableCell>
                               <MarkdownRenderer content={conjunto.datoTexto || conjunto.recurso?.nombre || ''} />
                             </TableCell>

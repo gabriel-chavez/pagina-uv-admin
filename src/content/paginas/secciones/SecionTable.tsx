@@ -7,29 +7,31 @@ import {
     TableHead,
     TableRow,
     Button,
-    
     Tooltip,
     Paper,
     IconButton,
-    ButtonGroup
+    ButtonGroup,
+    Box,
+    Dialog,
+    DialogContent
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import CloseIcon from '@mui/icons-material/Close';
+
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
 const SeccionTable = ({ secciones, onEdit, onView }) => {
     const [items, setItems] = useState([]);
     const [mounted, setMounted] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null);  // Estado para la imagen de vista previa
 
     useEffect(() => {
         setItems(secciones);
-    }, [secciones]);
-
-    useEffect(() => {
         setMounted(true);
-    }, []);
+    }, [secciones]);
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
@@ -39,6 +41,14 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
         reorderedItems.splice(result.destination.index, 0, removed);
 
         setItems(reorderedItems);
+    };
+
+    const handlePreviewOpen = (img) => {
+        setPreviewImage(img);  // Establecer la imagen para la vista preliminar
+    };
+
+    const handlePreviewClose = () => {
+        setPreviewImage(null);  // Cerrar la vista preliminar
     };
 
     if (!mounted) {
@@ -54,13 +64,11 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                             <Table {...provided.droppableProps} ref={provided.innerRef}>
                                 <TableHead>
                                     <TableRow>
-
-                                       
-
                                         <TableCell>Nombre</TableCell>
                                         <TableCell>Título</TableCell>
                                         <TableCell>Subtítulo</TableCell>
                                         <TableCell>Tipo de Sección</TableCell>
+                                        <TableCell>Vista previa</TableCell>
                                         <TableCell>Clase</TableCell>
                                         <TableCell>Habilitado</TableCell>
                                         <TableCell align="right">Acciones</TableCell>
@@ -75,16 +83,31 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                 >
-
-                                                    
                                                     <TableCell>{seccion.nombre}</TableCell>
                                                     <TableCell>
                                                         <MarkdownRenderer content={seccion.titulo} />
                                                     </TableCell>
                                                     <TableCell>
                                                         <MarkdownRenderer content={seccion.subTitulo} />
-                                                    </TableCell>              
-                                                    <TableCell>{seccion.catTipoSeccion.nombre}</TableCell>                                      
+                                                    </TableCell>
+                                                    <TableCell>{seccion.catTipoSeccion.nombre}</TableCell>
+                                                    <TableCell>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Box
+                                                                component="img"
+                                                                src={seccion.catTipoSeccion.imagenSeccion}
+                                                                alt={seccion.catTipoSeccion.nombre}
+                                                                sx={{
+                                                                    width: 200,
+                                                                    height: 100,
+                                                                    objectFit: 'contain',
+                                                                    marginRight: 2,
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                                onClick={() => handlePreviewOpen(seccion.catTipoSeccion.imagenSeccion)} // Asegurándome de que la ruta de la imagen esté correcta
+                                                            />
+                                                        </Box>
+                                                    </TableCell>
                                                     <TableCell>{seccion.clase}</TableCell>
                                                     <TableCell>
                                                         {seccion.habilitado ? 'Habilitado' : 'Deshabilitado'}
@@ -127,6 +150,27 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                     </Droppable>
                 </DragDropContext>
             </TableContainer>
+            {/* Modal de Vista Preliminar */}
+            <Dialog open={Boolean(previewImage)} onClose={handlePreviewClose} maxWidth="md" fullWidth>
+                <DialogContent sx={{ position: 'relative', textAlign: 'center', padding: 0 }}>
+                    <IconButton
+                        onClick={handlePreviewClose}
+                        sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+                    >
+                        <CloseIcon sx={{ color: 'white' }} />
+                    </IconButton>
+                    {previewImage && (
+                        <img
+                            src={previewImage}
+                            alt="Vista Preliminar"
+                            style={{
+                                maxWidth: '100%',
+                                height: 'auto',
+                            }}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
         </Paper>
     );
 };

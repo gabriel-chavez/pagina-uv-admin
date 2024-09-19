@@ -9,7 +9,7 @@ export const obtenerPaginas = async () => {
         throw error;
     }
 };
-export const actualizarMenu = async (id, data) => {
+export const actualizarPagina = async (id, data) => {
     try {
         const response = await apiClient.put(`/api/PaginasDinamicas/${id}`, data);
         return response.data;
@@ -18,7 +18,7 @@ export const actualizarMenu = async (id, data) => {
         throw error;
     }
 };
-export const crearMenu = async (data) => {
+export const crearPagina = async (data) => {
     try {
         const response = await apiClient.post(`/api/PaginasDinamicas/`,data);
         return response.data;
@@ -50,6 +50,15 @@ export const crearSeccion = async (data) => {
 export const actualizarSeccion = async (id,data) => {
     try {
         const response = await apiClient.put(`/api/Secciones/${id}`,data);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerSeccion = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/Secciones/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -117,6 +126,25 @@ export const obtenerTipoSeccion = async () => {
 export const obtenerRecursos = async () => {
     try {
         const response = await apiClient.get(`/api/Recurso/`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/*BANNER PAGINA*/
+export const actualizarBannerPagina = async (id, data) => {
+    try {
+        const response = await apiClient.put(`/api/BannerPaginaDinamicas/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const crearBannerPagina = async (data) => {
+    try {
+        const response = await apiClient.post(`/api/BannerPaginaDinamicas/`,data);
         return response.data;
     } catch (error) {
 

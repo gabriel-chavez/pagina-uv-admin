@@ -17,7 +17,6 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  MenuItem,
   FormControl,
   Box,
   Typography,
@@ -34,7 +33,7 @@ import { actualizarSeccion, crearSeccion, obtenerSecciones, obtenerTipoSeccion }
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import Editor from '@/utils/MdxEditor';
-import { Label } from '@mui/icons-material';
+import ImageGallerySelect from '@/utils/ImageGallerySelect ';
 
 export async function getServerSideProps() {
   try {
@@ -53,6 +52,7 @@ export async function getServerSideProps() {
     };
   }
 }
+
 
 const Seccion = ({ tipoSeccion }) => {
   const { openSnackbar } = useSnackbar();
@@ -145,8 +145,6 @@ const Seccion = ({ tipoSeccion }) => {
     }
   };
 
-
-
   const handleVerDatos = (id) => {
     router.push(`/paginas/secciones/datos/${id}`);
   };
@@ -179,7 +177,6 @@ const Seccion = ({ tipoSeccion }) => {
               <SeccionTable
                 secciones={secciones}
                 onEdit={(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado) => handleModalAgregarEditar(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado)}
-
                 onView={handleVerDatos}
               />
             </Card>
@@ -197,7 +194,6 @@ const Seccion = ({ tipoSeccion }) => {
             <DialogContentText>
               Ingresa los datos del formulario para agregar una sección
             </DialogContentText>
-
 
             <Controller
               name="nombre"
@@ -218,7 +214,6 @@ const Seccion = ({ tipoSeccion }) => {
               )}
             />
 
-
             <Box mt={2}>
               <FormControl fullWidth margin="dense">
                 <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Título</FormLabel>
@@ -231,6 +226,7 @@ const Seccion = ({ tipoSeccion }) => {
                 />
               </FormControl>
             </Box>
+
             <Box mt={2}>
               <FormControl fullWidth margin="dense">
                 <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Subtítulo</FormLabel>
@@ -243,30 +239,24 @@ const Seccion = ({ tipoSeccion }) => {
                 />
               </FormControl>
             </Box>
+
             <FormControl fullWidth margin="dense">
+            <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Tipo de sección</FormLabel>
               <Controller
                 name="catTipoSeccionId"
                 control={control}
                 rules={{ required: 'Tipo de Sección es requerido' }}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    select
-                    label="Tipo de Sección"
-                    variant="standard"
-                    error={!!fieldState.error}
-                    helperText={fieldState.error ? fieldState.error.message : ''}
-                  >
-                    {tipoSeccion.length > 0 ? (
-                      tipoSeccion.map((tipo) => (
-                        <MenuItem key={tipo.id} value={tipo.id}>
-                          {tipo.nombre}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem disabled>No hay tipos de sección disponibles</MenuItem>
+                render={({ field, fieldState }) => ( // Agrega fieldState en el destructuring
+                  <>
+                    <ImageGallerySelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={tipoSeccion}
+                    />
+                    {fieldState.error && (
+                      <Typography color="error">{fieldState.error.message}</Typography>
                     )}
-                  </TextField>
+                  </>
                 )}
               />
             </FormControl>
