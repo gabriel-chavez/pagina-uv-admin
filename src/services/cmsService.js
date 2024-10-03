@@ -3,6 +3,16 @@ import apiClient from '../config/api-config';
 export const obtenerPaginas = async () => {
     try {
         const response = await apiClient.get(`/api/PaginasDinamicas/`);
+        
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerPagina = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/PaginasDinamicas/${id}`);
         return response.data;
     } catch (error) {
 
@@ -27,14 +37,23 @@ export const crearPagina = async (data) => {
         throw error;
     }
 };
+export const eliminarPagina = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/PaginasDinamicas/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    } 
+};
 /*SECCIONES*/
 export const obtenerSecciones = async (id) => {
     try {
         const response = await apiClient.get(`/api/Secciones/paginadinamica/${id}`);    
         return response.data;
-    } catch (error) {
-
+    } catch (error) {      
         throw error;
+        
     }
 };
 
@@ -46,6 +65,15 @@ export const crearSeccion = async (data) => {
 
         throw error;
     }
+};
+export const eliminarSeccion = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/Secciones/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    } 
 };
 export const actualizarSeccion = async (id,data) => {
     try {

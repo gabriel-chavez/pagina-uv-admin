@@ -19,11 +19,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
-const SeccionTable = ({ secciones, onEdit, onView }) => {
+const SeccionTable = ({ secciones, onEdit, onView, btnEliminar }) => {
     const [items, setItems] = useState([]);
     const [mounted, setMounted] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);  // Estado para la imagen de vista previa
@@ -68,7 +70,7 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                         <TableCell>Título</TableCell>
                                         <TableCell>Subtítulo</TableCell>
                                         <TableCell>Tipo de Sección</TableCell>
-                                        <TableCell>Vista previa</TableCell>
+                                        <TableCell>Ejemplo de sección</TableCell>
                                         <TableCell>Clase</TableCell>
                                         <TableCell>Habilitado</TableCell>
                                         <TableCell align="right">Acciones</TableCell>
@@ -119,8 +121,9 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                                                     color="inherit"
                                                                     startIcon={<EditIcon fontSize="small" />}
                                                                     onClick={() => onEdit(seccion.id, seccion.nombre, seccion.catTipoSeccionId, seccion.titulo, seccion.subTitulo, seccion.clase, seccion.orden, seccion.habilitado)}
+                                                                    
                                                                 >
-                                                                    Editar
+                                                                      
                                                                 </Button>
                                                             </Tooltip>
                                                             <Tooltip placement="top" title="Ver Datos" arrow>
@@ -129,14 +132,27 @@ const SeccionTable = ({ secciones, onEdit, onView }) => {
                                                                     startIcon={<VisibilityIcon fontSize="small" />}
                                                                     onClick={() => onView(seccion.id)}
                                                                 >
-                                                                    Datos
+                                                                    {/* Datos */}
                                                                 </Button>
+                                                            </Tooltip>
+                                                            <Tooltip placement="top" title="Eliminar" arrow>
+                                                                <Button
+                                                                    color="inherit"
+                                                                    size="small"
+                                                                    variant="text"
+                                                                    startIcon={<DeleteIcon fontSize="small" />}
+                                                                    onClick={() => btnEliminar(seccion.id)}
+                                                                >
+                                                                    {/* Eliminar */}
+                                                                </Button>
+
                                                             </Tooltip>
                                                             <Tooltip placement="top" title="Ordenar" arrow>
                                                                 <IconButton {...provided.dragHandleProps}>
                                                                     <DragIndicatorIcon />
                                                                 </IconButton>
                                                             </Tooltip>
+                                                            
                                                         </ButtonGroup>
                                                     </TableCell>
                                                 </TableRow>

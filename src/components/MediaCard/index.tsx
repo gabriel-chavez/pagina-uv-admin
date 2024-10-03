@@ -1,14 +1,17 @@
 import * as React from 'react';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Menu, MenuItem, Tooltip } from '@mui/material';
 
 function MediaCard({
   image,
@@ -17,12 +20,29 @@ function MediaCard({
   description2,
   button1Text,
   button2Text,
-  onButton1Click = () => {},
-  onButton2Click = () => {},
-  onEditClick = () => {},
+  button3Text,
+  onButton1Click = () => { },
+  onButton2Click = () => { },
+  onButton3Click = () => { },
+  onEditClick = () => { },
 }) {
-  
-  
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleEditarBannerClick = () => {
+    onEditClick();
+    handleClose(); // Cierra el menú después de la edición
+  };
+  const handleEliminarClick = () => {
+    onButton3Click();
+    handleClose(); // Cierra el menú después de la edición
+  };
   return (
     <Card sx={{ maxWidth: 345, position: 'relative' }}>
       <CardMedia
@@ -31,24 +51,7 @@ function MediaCard({
         title={title}
       >
         {/* Botón de edición centrado */}
-        <IconButton
-          aria-label="edit"
-          onClick={onEditClick}
-          sx={{
-            position: 'absolute',
-            top: '8%',
-            left: '8%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            width: 30,
-            height: 30,
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
+        
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -61,11 +64,40 @@ function MediaCard({
           {description2}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small" onClick={onButton1Click}>{button1Text}</Button>
-        <Button size="small" onClick={onButton2Click}>{button2Text}</Button>
+     
+      <CardActions disableSpacing>
+        <Tooltip placement="top" title={button1Text} arrow>
+          <IconButton
+            onClick={onButton1Click}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip placement="top" title={button2Text} arrow>
+          <IconButton
+            onClick={onButton2Click}>
+            <VisibilityIcon />
+          </IconButton>
+        </Tooltip>
+        <IconButton sx={{ marginLeft: 'auto' }}
+          onClick={handleClick}>
+          <MoreVertIcon />
+        </IconButton>
       </CardActions>
-    </Card>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >        
+        <MenuItem onClick={handleEditarBannerClick}>Cambiar banner</MenuItem>
+        <MenuItem onClick={handleClose}>Asignar menú</MenuItem>
+        <MenuItem onClick={handleEliminarClick}>Eliminar Página</MenuItem>
+      </Menu>
+    </Card >
+
   );
 }
 
@@ -78,6 +110,7 @@ MediaCard.propTypes = {
   description2: PropTypes.string.isRequired,
   onButton1Click: PropTypes.func,
   onButton2Click: PropTypes.func,
+  onButton3Click: PropTypes.func,
   onEditClick: PropTypes.func,
 };
 

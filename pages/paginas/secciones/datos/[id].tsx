@@ -72,7 +72,7 @@ const Seccion = () => {
   const [formData, setFormData] = useState<Seccion | null>(null);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [openConfirmationDelete, setOpenConfirmationDelete] = useState(false);
-  const [idToDelete, setIdToDelete] = useState<number | null>(null); // Estado separado para la eliminación
+  const [idToDelete, setIdToDelete] = useState<number | null>(null);
   const [listaDeRecursos, setListaDeRecursos] = useState([]);
   const [informacionSeccion, setInformacionSeccion] = useState<Seccion | null>(null);
   const [datos, setDatos] = useState([]);
@@ -98,8 +98,9 @@ const Seccion = () => {
     const cargarRecursos = async () => {
       try {
         const recursos = await obtenerRecursos();
-        setListaDeRecursos(recursos);
+        setListaDeRecursos(recursos.datos);
       } catch (error) {
+        setListaDeRecursos([]);
         console.error("Error al cargar recursos:", error);
       }
     };
@@ -107,27 +108,27 @@ const Seccion = () => {
     cargarRecursos();
   }, []);
 
-  const fetchSecciones = async () => {
+  const fetchDatosPorSeccion = async () => {
     try {
       const data = await obtenerDatosPorSeccion(seccionId);
-      setDatos(data);
+      setDatos(data.datos);
     } catch (error) {
-      console.error('Error al obtener las secciones:', error);
+      setDatos([]);
     }
   };
 
   const cargarInformacionSeccion = async () => {
     try {
       const seccion = await obtenerSeccion(seccionId);
-      setInformacionSeccion(seccion);
+      setInformacionSeccion(seccion.datos);
     } catch (error) {
-      console.error("Error al cargar información de sección:", error);
+      setInformacionSeccion([]);
     }
   };
 
   useEffect(() => {
     if (seccionId) {
-      fetchSecciones();
+      fetchDatosPorSeccion();
       cargarInformacionSeccion();
     }
   }, [seccionId]);
@@ -190,36 +191,30 @@ const Seccion = () => {
   };
 
   const handleConfirmSubmit = async () => {
-    try {
-      let respuesta;
-      if (formData && formData.id) {
-        respuesta = await actualizarDatos(formData.id, formData);
-      } else {
-        respuesta = await crearDatos(formData);
-      }
-      openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
-      handleConfirmClose();
-      setOpen(false);
-      reset();
-      fetchSecciones();
-    } catch (error) {
-      console.error("Error al guardar los datos:", error);
-      openSnackbar('Error al guardar los datos', 'error');
+
+    let respuesta;
+    if (formData && formData.id) {
+      respuesta = await actualizarDatos(formData.id, formData);
+    } else {
+      respuesta = await crearDatos(formData);
     }
+    openSnackbar(respuesta.mensaje);
+    handleConfirmClose();
+    setOpen(false);
+    reset();
+    fetchDatosPorSeccion();
+
   };
 
   const handleConfirmDeleteSubmit = async () => {
     if (idToDelete !== null) {
-      try {
-        const respuesta = await eliminarDatos(idToDelete);
-        openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
-        reset();
-        handleConfirmDeleteClose();
-        fetchSecciones();
-      } catch (error) {
-        console.error("Error al eliminar los datos:", error);
-        openSnackbar('Error al eliminar los datos', 'error');
-      }
+
+      const respuesta = await eliminarDatos(idToDelete);
+      openSnackbar(respuesta.mensaje);
+      reset();
+      handleConfirmDeleteClose();
+      fetchDatosPorSeccion();
+
     }
   };
 

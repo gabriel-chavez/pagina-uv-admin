@@ -4,7 +4,7 @@
   "title": "admin cms",
   "description": "admin cms",
   "author": {
-    "name": "uv"    
+    "name": "uv"
   },
   "private": false,
   "dependencies": {

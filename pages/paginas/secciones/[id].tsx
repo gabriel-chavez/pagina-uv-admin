@@ -29,18 +29,25 @@ import TituloPagina from '@/components/TituloPagina';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import Footer from '@/components/Footer';
 import SeccionTable from '@/content/paginas/secciones/SecionTable';
-import { actualizarSeccion, crearSeccion, obtenerSecciones, obtenerTipoSeccion } from '@/services/cmsService';
+import { actualizarSeccion, crearSeccion, eliminarSeccion, obtenerPagina, obtenerSecciones, obtenerTipoSeccion } from '@/services/cmsService';
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import Editor from '@/utils/MdxEditor';
 import ImageGallerySelect from '@/utils/ImageGallerySelect ';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   try {
-    const tipoSeccion = await obtenerTipoSeccion();
+    const response = await obtenerTipoSeccion();
+    const tipoSeccion = response.datos;
+    const { id: paginaDinamicaId } = context.query;
+    const response2 = await obtenerPagina(paginaDinamicaId);
+    console.log(response2)
+    const datosPagina = response2.datos;
+
     return {
       props: {
-        tipoSeccion
+        tipoSeccion,
+        datosPagina
       }
     };
   } catch (error) {
@@ -54,7 +61,8 @@ export async function getServerSideProps() {
 }
 
 
-const Seccion = ({ tipoSeccion }) => {
+const Seccion = ({ tipoSeccion,datosPagina  }) => {
+
   const { openSnackbar } = useSnackbar();
   const [formData, setFormData] = useState(null);
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -63,13 +71,15 @@ const Seccion = ({ tipoSeccion }) => {
   const router = useRouter();
   const { id: paginaDinamicaId } = router.query; // Obtener el parámetro de la ruta
   const [dialogTitle, setDialogTitle] = useState('Crear');
+  const [openConfirmacionEliminacion, setOpenConfirmacionEliminacion] = useState(false);
+  const [idAEliminar, setIdAEliminar] = useState<number | null>(null);
 
   const fetchSecciones = async () => {
     try {
       const data = await obtenerSecciones(paginaDinamicaId);
-      setSecciones(data);
+      setSecciones(data.datos);
     } catch (error) {
-      console.error('Error al obtener las secciones:', error);
+      setSecciones([]);
     }
   };
 
@@ -125,28 +135,44 @@ const Seccion = ({ tipoSeccion }) => {
   };
 
   const handleConfirmSubmit = async () => {
-    try {
-      let respuesta;
-      if (formData && formData.id) {
-        respuesta = await actualizarSeccion(formData.id, formData);
-      } else {
-        respuesta = await crearSeccion(formData);
-      }
 
-      openSnackbar(respuesta ? respuesta.mensaje : 'Operación exitosa');
-      handleConfirmClose();
-      setOpen(false);
-      reset();
-      fetchSecciones(); // Actualiza la lista de secciones después de crear o actualizar
-
-    } catch (error) {
-      console.error("Error al guardar la sección:", error);
-      openSnackbar('Error al guardar la sección', 'error');
+    let respuesta;
+    if (formData && formData.id) {
+      respuesta = await actualizarSeccion(formData.id, formData);
+    } else {
+      respuesta = await crearSeccion(formData);
     }
+
+    openSnackbar(respuesta.mensaje);
+    handleConfirmClose();
+    setOpen(false);
+    reset();
+    fetchSecciones(); // Actualiza la lista de secciones después de crear o actualizar
+
+
   };
 
   const handleVerDatos = (id) => {
     router.push(`/paginas/secciones/datos/${id}`);
+  };
+  const handleConfirmarEliminacionOpen = (id: number) => {
+    setIdAEliminar(id); // Establece el ID para eliminar
+    setOpenConfirmacionEliminacion(true);
+  };
+  const handleConfirmarEliminacionClose = () => {
+    setOpenConfirmacionEliminacion(false);
+    setIdAEliminar(null);
+  };
+  const handleConfirmarEliminacionSubmit = async () => {
+    if (idAEliminar !== null) {
+
+      const respuesta = await eliminarSeccion(idAEliminar);
+      openSnackbar(respuesta.mensaje);
+      reset();
+      handleConfirmarEliminacionClose();
+      fetchSecciones();
+
+    }
   };
 
   return (
@@ -157,7 +183,12 @@ const Seccion = ({ tipoSeccion }) => {
       <PageTitleWrapper>
         <TituloPagina
           titulo="Secciones"
-          subtitulo="Administra las secciones de la página SOAT"
+          subtitulo={
+            <>
+              Administra las secciones de la página{' '}
+              <span style={{ fontWeight: 'bold' }}>{datosPagina.nombre}</span>
+            </>
+          }
           tituloBoton="Agregar sección"
           onCreate={() => handleModalAgregarEditar()}
         />
@@ -178,6 +209,7 @@ const Seccion = ({ tipoSeccion }) => {
                 secciones={secciones}
                 onEdit={(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado) => handleModalAgregarEditar(id, nombre, tipoSeccion, titulo, subTitulo, clase, orden, habilitado)}
                 onView={handleVerDatos}
+                btnEliminar={(id) => handleConfirmarEliminacionOpen(id)}
               />
             </Card>
           </Grid>
@@ -186,11 +218,13 @@ const Seccion = ({ tipoSeccion }) => {
       <Footer />
       <Dialog
         open={open}
+        maxWidth="md"
+        fullWidth={true}
         onClose={handleClose}
       >
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <DialogTitle>{dialogTitle} Sección</DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{ paddingBottom: '60px' }}>
             <DialogContentText>
               Ingresa los datos del formulario para agregar una sección
             </DialogContentText>
@@ -241,7 +275,7 @@ const Seccion = ({ tipoSeccion }) => {
             </Box>
 
             <FormControl fullWidth margin="dense">
-            <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Tipo de sección</FormLabel>
+              <FormLabel sx={{ marginBottom: '15px', fontSize: '12px' }}>Tipo de sección</FormLabel>
               <Controller
                 name="catTipoSeccionId"
                 control={control}
@@ -297,10 +331,23 @@ const Seccion = ({ tipoSeccion }) => {
               />
             </FormGroup>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
-            <Button type="submit">Guardar</Button>
-          </DialogActions>
+          <Box
+            sx={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: '#fff',
+              zIndex: 1000,
+              borderTop: '1px solid #e0e0e0',
+              padding: '8px 24px',
+            }}
+          >
+            <DialogActions>
+              <Button onClick={handleClose}>Cancelar</Button>
+              <Button type="submit">Guardar</Button>
+            </DialogActions>
+          </Box>
         </form>
       </Dialog>
       <ConfirmationDialog
@@ -309,6 +356,13 @@ const Seccion = ({ tipoSeccion }) => {
         handleConfirm={handleConfirmSubmit}
         title="Confirmar"
         content={`¿Estás seguro de que deseas ${dialogTitle.toLowerCase()} la sección?`}
+      />
+      <ConfirmationDialog
+        open={openConfirmacionEliminacion}
+        handleClose={handleConfirmarEliminacionClose}
+        handleConfirm={handleConfirmarEliminacionSubmit}
+        title="Confirmar eliminación"
+        content={`¿Estás seguro de que deseas eliminar la sección?`}
       />
     </>
   );

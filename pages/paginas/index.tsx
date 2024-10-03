@@ -13,7 +13,7 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import Footer from '@/components/Footer';
 import PaginasDinamicas from '@/content/paginas/PaginasDinamicas';
 import ConfirmationDialog from '@/utils/Confirmacion';
-import { obtenerPaginas, actualizarPagina, crearPagina, obtenerRecursos, actualizarBannerPagina, crearBannerPagina } from '@/services/cmsService';
+import { obtenerPaginas, actualizarPagina, crearPagina, obtenerRecursos, actualizarBannerPagina, crearBannerPagina, eliminarPagina } from '@/services/cmsService';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import VisorDeArchivos from '@/utils/VisorDeArchivos';
@@ -21,20 +21,18 @@ import VisorDeArchivos from '@/utils/VisorDeArchivos';
 const fetchRecursos = async () => {
     try {
         const recursos = await obtenerRecursos();
-        return recursos;
+        return recursos.datos;
     } catch (error) {
-        console.error("Error al obtener los:", error);
-        throw error; // Re-lanzar el error si necesitas manejarlo fuera de esta función
+        return [];
     }
 };
 
 const fetchPaginasDinamicas = async () => {
     try {
         const paginas = await obtenerPaginas();
-        return paginas;
+        return paginas.datos;
     } catch (error) {
-        console.error("Error al obtener las páginas dinámicas:", error);
-        throw error; // Re-lanzar el error si necesitas manejarlo fuera de esta función
+        return [];
     }
 };
 // Componente para manejar la lógica del formulario
@@ -53,14 +51,10 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
     const [listaDeRecursos, setListaDeRecursos] = useState([]);
     const { openSnackbar } = useSnackbar();
 
-    useEffect(() => {        
+    useEffect(() => {
         const cargarRecursos = async () => {
-            try {
-                const recursos = await fetchRecursos();
-                setListaDeRecursos(recursos);                
-            } catch (error) {
-                console.error("Error al cargar recursos:", error);
-            }
+            const recursos = await fetchRecursos();
+            setListaDeRecursos(recursos);
         };
 
         cargarRecursos(); // Llamar a la función asíncrona
@@ -87,29 +81,27 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
     };
 
     const handleConfirmar = async () => {
-        try {
-            let respuesta;
-            
-            if (formData.id) {
-                respuesta = await actualizarBannerPagina(formData.id, formData);
-            } else {
-                respuesta = await crearBannerPagina(formData);
-            }
-            openSnackbar(respuesta.mensaje);
-            reset();
-            confirmacion();
-            handleCerrarConfirmacion();
-            cerrarModal();
-        } catch (error) {
-            openSnackbar('Error al guardar la página dinámica', 'error');
+
+        let respuesta;
+
+        if (formData.id) {
+            respuesta = await actualizarBannerPagina(formData.id, formData);
+        } else {
+            respuesta = await crearBannerPagina(formData);
         }
+        openSnackbar(respuesta.mensaje);
+        reset();
+        confirmacion();
+        handleCerrarConfirmacion();
+        cerrarModal();
+
     };
 
     return (
         <>
-            <Dialog 
-                open={abrirModal} 
-                onClose={handleCerarModal} 
+            <Dialog
+                open={abrirModal}
+                onClose={handleCerarModal}
                 aria-labelledby="form-dialog-title"
                 maxWidth="lg" // Controla el tamaño máximo del diálogo (lg, md, sm, xl, xs)
                 fullWidth // Hace que el diálogo ocupe el 100% del ancho máximo especificado
@@ -123,7 +115,7 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
                         }
                     }
                 }}
-                >
+            >
 
                 <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                     <DialogTitle id="form-dialog-title">Cambiar banner de página dinámica</DialogTitle>
@@ -203,21 +195,19 @@ const FormularioPaginaDinamica = ({ abrirModal, cerrarModal, tituloModal, datosI
     };
 
     const handleConfirmar = async () => {
-        try {
-            let respuesta;
-            if (formData.id) {
-                respuesta = await actualizarPagina(formData.id, formData);
-            } else {
-                respuesta = await crearPagina(formData);
-            }
-            openSnackbar(respuesta.mensaje);
-            reset();
-            confirmacion();
-            handleCerrarConfirmacion();
-            cerrarModal();
-        } catch (error) {
-            openSnackbar('Error al guardar la página dinámica', 'error');
+
+        let respuesta;
+        if (formData.id) {
+            respuesta = await actualizarPagina(formData.id, formData);
+        } else {
+            respuesta = await crearPagina(formData);
         }
+        openSnackbar(respuesta.mensaje);
+        reset();
+        confirmacion();
+        handleCerrarConfirmacion();
+        cerrarModal();
+
     };
 
     return (
@@ -292,33 +282,32 @@ const FormularioPaginaDinamica = ({ abrirModal, cerrarModal, tituloModal, datosI
 // Componente principal de la página
 const Pagina = () => {
     const router = useRouter();
+    const { openSnackbar } = useSnackbar();
     const [abrirModalFormularioPrincipal, setAbrirModalFormularioPrincipal] = useState(false);
     const [abrirModalFormularioBanner, setAbrirModalFormularioBanner] = useState(false);
     const [tituloModal, setTituloModal] = useState('Crear');
     const [FormDataPrincipal, setFormDataPrincipal] = useState(null);
     const [FormDataBanner, setFormDataBanner] = useState(null);
     const [listaDePaginasDinamicas, setListaDePaginasDinamicas] = useState([]); // Estado para las páginas dinámicas
-
+    const [abrirConfirmacionEliminar, setAbrirConfirmacionEliminar] = useState(false);
+    const [idAEliminar, setIdAEliminar] = useState<number | null>(null);
     const handleAbrirModalAgregarEditar = (id = null, nombre = '', habilitado = true) => {
-        
+
         setFormDataPrincipal({ id, nombre, habilitado });
         setTituloModal(id ? 'Editar' : 'Crear');
         setAbrirModalFormularioPrincipal(true);
     };
-    const handleAbrirModalBanner = (id = null, paginaDinamicaId=null, recursoId = null) => {
-        console.log(id,paginaDinamicaId,recursoId)
-        setFormDataBanner({ id, paginaDinamicaId, recursoId });        
+    const handleAbrirModalBanner = (id = null, paginaDinamicaId = null, recursoId = null) => {
+        setFormDataBanner({ id, paginaDinamicaId, recursoId });
         setAbrirModalFormularioBanner(true);
     };
 
     useEffect(() => {
         const cargarPaginas = async () => {
-            try {
-                const paginas = await fetchPaginasDinamicas();
-                setListaDePaginasDinamicas(paginas); // Asignar el resultado al estado
-            } catch (error) {
-                console.error("Error al cargar las páginas dinámicas:", error);
-            }
+
+            const paginas = await fetchPaginasDinamicas();
+            setListaDePaginasDinamicas(paginas); // Asignar el resultado al estado
+
         };
 
         cargarPaginas(); // Llamar a la función asíncrona
@@ -334,7 +323,7 @@ const Pagina = () => {
         setAbrirModalFormularioPrincipal(false);
         setFormDataPrincipal(null);
     };
-    const handleCerrarModalFormularioBanner=()=>{
+    const handleCerrarModalFormularioBanner = () => {
         setAbrirModalFormularioBanner(false);
         setFormDataBanner(null);
     }
@@ -342,7 +331,25 @@ const Pagina = () => {
         const paginas = await fetchPaginasDinamicas();
         setListaDePaginasDinamicas(paginas); // Asignar el resultado al estado
     }
+    const handleCerrarConfirmacionEliminar = () => {
+        setAbrirConfirmacionEliminar(false);
+    };
+    const handleConfirmarEliminar = async () => {
 
+        if (idAEliminar !== null) {
+
+            const respuesta = await eliminarPagina(idAEliminar);
+            openSnackbar(respuesta.mensaje);
+            setIdAEliminar(null);
+            setAbrirConfirmacionEliminar(false);
+            handleActualizarListaDePaginasDinamicas();
+        }
+
+    };
+    const handleConfirmarEliminacionOpen = (id: number) => {
+        setIdAEliminar(id); // Establece el ID para eliminar
+        setAbrirConfirmacionEliminar(true);
+    };
     return (
         <>
             <Head>
@@ -367,7 +374,9 @@ const Pagina = () => {
                                     paginas={listaDePaginasDinamicas}
                                     onClickModalAgregarEditar={handleAbrirModalAgregarEditar}
                                     onClickSecciones={handleRedireccionarASecciones}
+                                    onClickEliminarPagina={handleConfirmarEliminacionOpen}
                                     onClickEditarBanner={handleAbrirModalBanner}
+
                                 />
                             </CardContent>
                         </Card>
@@ -385,15 +394,21 @@ const Pagina = () => {
                 />
             )}
             {abrirModalFormularioBanner && (
-                <FormularioBanner 
-                    abrirModal={abrirModalFormularioBanner} 
+                <FormularioBanner
+                    abrirModal={abrirModalFormularioBanner}
                     cerrarModal={handleCerrarModalFormularioBanner}
                     datosIniciales={FormDataBanner}
                     confirmacion={handleActualizarListaDePaginasDinamicas}
-                    />
+                />
             )
-
             }
+            <ConfirmationDialog
+                open={abrirConfirmacionEliminar}
+                handleClose={handleCerrarConfirmacionEliminar}
+                handleConfirm={handleConfirmarEliminar}
+                title="Confirmar"
+                content={`¿Estás seguro de que deseas eliminar la página dinámica?`}
+            />
         </>
     );
 };

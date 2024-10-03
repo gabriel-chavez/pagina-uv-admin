@@ -42,9 +42,10 @@ interface PaginasDinamicasProps {
     onClickModalAgregarEditar: (id: number, nombre: string, habilitado: boolean, menuPrincipalId: number) => void;
     onClickSecciones: (id: number) => void;
     onClickEditarBanner: (id: number, paginaId: number, recursoId:number) => void;
+    onClickEliminarPagina: (id: number) => void;
 }
 
-const PaginasDinamicas: React.FC<PaginasDinamicasProps> = ({ paginas, onClickModalAgregarEditar, onClickSecciones, onClickEditarBanner }) => {
+const PaginasDinamicas: React.FC<PaginasDinamicasProps> = ({ paginas, onClickModalAgregarEditar, onClickSecciones, onClickEditarBanner,onClickEliminarPagina }) => {
     return (
         <Grid spacing={5} container>
             {paginas.map((pagina) => {
@@ -64,9 +65,11 @@ const PaginasDinamicas: React.FC<PaginasDinamicasProps> = ({ paginas, onClickMod
                             description={menuPrincipal}
                             description2={habilitado}
                             button1Text="Editar"
-                            button2Text="Ver Secciones"
+                            button2Text="Secciones"
+                            button3Text="Eliminar"
                             onButton1Click={() => onClickModalAgregarEditar(pagina.id, pagina.nombre, pagina.habilitado, pagina.menuPrincipalId)}
                             onButton2Click={() => onClickSecciones(pagina.id)}
+                            onButton3Click={() => onClickEliminarPagina(pagina.id)}
                             onEditClick={() => onClickEditarBanner(bannerPaginaDinamcaId, pagina.id, recursoId)}
                         />
                     </Grid>

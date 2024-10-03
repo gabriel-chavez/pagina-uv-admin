@@ -12,18 +12,18 @@ import {
   Paper,
   IconButton,
   ButtonGroup
-  
+
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete'; 
+import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
-const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnEliminar }) => {
+const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar, btnEliminar }) => {
   const [items, setItems] = useState([]);
   const [mounted, setMounted] = useState(false);
-
+  console.log(conjuntosDatos)
   useEffect(() => {
     setItems(conjuntosDatos);
   }, [conjuntosDatos]);
@@ -48,15 +48,15 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
 
     setItems(newItems);
   };
-  
+
   if (!mounted) {
     return null;
   }
   //console.log(items);
   const obtenerFila = () => {
-    let maxRow = 0; 
+    let maxRow = 0;
 
-    
+
     console.log(items);
     items.flat().forEach(item => {
       if (item.fila > maxRow) {
@@ -77,7 +77,7 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                 <Table>
                   <TableHead>
                     <TableRow>
-                    <TableCell>Nro.</TableCell>
+                      <TableCell>Nro.</TableCell>
                       <TableCell>Texto</TableCell>
                       <TableCell>Url</TableCell>
                       <TableCell>Recurso</TableCell>
@@ -95,10 +95,23 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                           >
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
-                              <MarkdownRenderer content={conjunto.datoTexto || conjunto.recurso?.nombre || ''} />
+                              <MarkdownRenderer content={conjunto.datoTexto || ''} />
                             </TableCell>
                             <TableCell>{conjunto.datoUrl || ''}</TableCell>
-                            <TableCell>{conjunto.recurso?.recursoEscritorio || ''}</TableCell>
+                            <TableCell>
+                              {conjunto.recurso?.catTipoRecursoId === 1 ? (
+                                <div>
+                                  <img
+                                    src={conjunto.recurso.recursoEscritorio}
+                                    alt="Imagen"
+                                    style={{ width: '150px', height: 'auto' }} // Ajusta el tamaño de la imagen según sea necesario
+                                  />
+                                  <div>{conjunto.recurso?.nombre}</div>
+                                </div>
+                              ) : (
+                                conjunto.recurso?.recursoEscritorio || ''
+                              )}
+                            </TableCell>
                             <TableCell align="right">
                               <ButtonGroup variant="text" size="small">
                                 <Tooltip placement="top" title="Editar" arrow>
@@ -118,7 +131,7 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                                     color="inherit"
                                     size="small"
                                     variant="text"
-                                    startIcon={<DeleteIcon  fontSize="small" />}
+                                    startIcon={<DeleteIcon fontSize="small" />}
                                     onClick={() => btnEliminar(conjunto.id)}
                                   >
                                     Eliminar
@@ -137,19 +150,19 @@ const SeccionTableConjuntoDatos = ({ conjuntosDatos, btnEditarAgregar,btnElimina
                       </Draggable>
                     ))}
                     {provided.placeholder}
-                 
+
                   </TableBody>
                   <TableFooter>
                     <TableRow>
-                      <TableCell colSpan={4} align="center">
+                      <TableCell colSpan={5} align="center">
                         <Button
                           variant="outlined"
                           size="small"
-                          color="primary"                          
+                          color="primary"
                           onClick={() => btnEditarAgregar(null, obtenerFila())}
                         >
                           Agregar fila nueva
-                       
+
                         </Button>
                       </TableCell>
                     </TableRow>
