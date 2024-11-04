@@ -24,7 +24,8 @@ function MediaCard({
   onButton1Click = () => { },
   onButton2Click = () => { },
   onButton3Click = () => { },
-  onEditClick = () => { },
+  onButton4Click = () => { },
+  onButton5Click = () => { }
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -36,11 +37,15 @@ function MediaCard({
     setAnchorEl(null);
   };
   const handleEditarBannerClick = () => {
-    onEditClick();
+    onButton4Click();
     handleClose(); // Cierra el menú después de la edición
   };
   const handleEliminarClick = () => {
     onButton3Click();
+    handleClose(); // Cierra el menú después de la edición
+  };
+  const handleEditarMenuClick = () => {
+    onButton5Click();
     handleClose(); // Cierra el menú después de la edición
   };
   return (
@@ -51,7 +56,7 @@ function MediaCard({
         title={title}
       >
         {/* Botón de edición centrado */}
-        
+
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -64,7 +69,7 @@ function MediaCard({
           {description2}
         </Typography>
       </CardContent>
-     
+
       <CardActions disableSpacing>
         <Tooltip placement="top" title={button1Text} arrow>
           <IconButton
@@ -91,9 +96,9 @@ function MediaCard({
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
-      >        
+      >
         <MenuItem onClick={handleEditarBannerClick}>Cambiar banner</MenuItem>
-        <MenuItem onClick={handleClose}>Asignar menú</MenuItem>
+        <MenuItem onClick={handleEditarMenuClick}>Asignar menú</MenuItem>
         <MenuItem onClick={handleEliminarClick}>Eliminar Página</MenuItem>
       </Menu>
     </Card >

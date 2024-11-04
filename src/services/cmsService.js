@@ -140,10 +140,28 @@ export const obtenerMenu = async () => {
         throw error;
     }
 };
+export const actualizarMenu = async (id, data) => {
+    try {
+        const response = await apiClient.put(`/api/MenuPrincipal/AsignarMenu/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
 /*PARAMETRICAS*/
 export const obtenerTipoSeccion = async () => {
     try {
         const response = await apiClient.get(`/api/CatTipoSeccion/`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerTipoSeguro = async () => {
+    try {
+        const response = await apiClient.get(`/api/CatTipoSeguro/`);
         return response.data;
     } catch (error) {
 
@@ -173,6 +191,118 @@ export const actualizarBannerPagina = async (id, data) => {
 export const crearBannerPagina = async (data) => {
     try {
         const response = await apiClient.post(`/api/BannerPaginaDinamicas/`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/*NUESTROS SEGUROS*/
+/*SEGURO*/
+export const obtenerSeguros = async () => {
+    try {
+        const response = await apiClient.get(`/api/Seguro/`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const crearSeguro= async (data) => {
+    try {
+        const response = await apiClient.post(`/api/Seguro/`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const actualizarSeguro = async (id, data) => {
+    try {
+        const response = await apiClient.put(`/api/Seguro/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const eliminarSeguro = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/Seguro/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/*PLAN*/
+export const obtenerPlanPorSeguro = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/Plan/ObtenerPorSeguro/${id}`);    
+        return response.data;
+    } catch (error) {      
+        throw error;
+        
+    }
+};
+export const crearPlan= async (data) => {
+    try {
+        const response = await apiClient.post(`/api/plan/`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const actualizarPlan = async (id, data) => {
+    try {
+        const response = await apiClient.put(`/api/plan/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const eliminarPlan = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/plan/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/*DETALLE SEGURO*/
+export const obtenerDetallePorSeguro = async (id) => {
+    try {
+        const response = await apiClient.get(`/api/SeguroDetalle/ObtenerPorSeguro/${id}`);    
+        return response.data;
+    } catch (error) {      
+        throw error;
+        
+    }
+};
+export const crearDetalle= async (data) => {
+    try {
+        const response = await apiClient.post(`/api/SeguroDetalle/`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const actualizarDetalle = async (id, data) => {
+    try {
+        const response = await apiClient.put(`/api/SeguroDetalle/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const eliminarDetalle = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/SeguroDetalle/${id}`);    
         return response.data;
     } catch (error) {
 

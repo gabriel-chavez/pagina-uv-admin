@@ -28,7 +28,7 @@ import Head from 'next/head';
 import TituloPagina from '@/components/TituloPagina';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import Footer from '@/components/Footer';
-import SeccionTable from '@/content/paginas/secciones/SecionTable';
+import SeccionTable from '@/content/paginas/secciones/SeccionTable';
 import { actualizarSeccion, crearSeccion, eliminarSeccion, obtenerPagina, obtenerSecciones, obtenerTipoSeccion } from '@/services/cmsService';
 import ConfirmationDialog from '@/utils/Confirmacion';
 import { useSnackbar } from '@/contexts/SnackbarContext';
@@ -153,7 +153,7 @@ const Seccion = ({ tipoSeccion,datosPagina  }) => {
   };
 
   const handleVerDatos = (id) => {
-    router.push(`/paginas/secciones/datos/${id}`);
+    router.push(`/paginas-dinamicas/secciones/datos/${id}`);
   };
   const handleConfirmarEliminacionOpen = (id: number) => {
     setIdAEliminar(id); // Establece el ID para eliminar

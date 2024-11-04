@@ -548,10 +548,10 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="/paginas" passHref>
+                <NextLink href="/paginas-dinamicas" passHref>
                   <Button
                     className={
-                      currentRoute === '/paginas' ? 'active' : ''
+                      currentRoute === '/paginas-dinamicas' ? 'active' : ''
                     }
                     disableRipple
                     component="a"
@@ -563,17 +563,17 @@ function SidebarMenu() {
                 </NextLink>
               </ListItem>
               <ListItem component="div">
-                <NextLink href="/applications/messenger" passHref>
+                <NextLink href="/nuestros-seguros" passHref>
                   <Button
                     className={
-                      currentRoute === '/applications/messenger' ? 'active' : ''
+                      currentRoute === '/anuestros-seguros' ? 'active' : ''
                     }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
                     startIcon={<MmsTwoToneIcon />}
                   >
-                    Recursos
+                    Seguros
                   </Button>
                 </NextLink>
               </ListItem>
