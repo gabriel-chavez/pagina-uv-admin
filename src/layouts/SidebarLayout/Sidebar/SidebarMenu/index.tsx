@@ -577,7 +577,7 @@ function SidebarMenu() {
                   </Button>
                 </NextLink>
               </ListItem>
-              <ListItem component="div">
+              {/* <ListItem component="div">
                 <NextLink href="/applications/messenger" passHref>
                   <Button
                     className={
@@ -589,6 +589,21 @@ function SidebarMenu() {
                     startIcon={<PanoramaIcon />}
                   >
                     Banners
+                  </Button>
+                </NextLink>
+              </ListItem> */}
+              <ListItem component="div">
+                <NextLink href="/noticias" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/noticias' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<PanoramaIcon />}
+                  >
+                    Noticias
                   </Button>
                 </NextLink>
               </ListItem>

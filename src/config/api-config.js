@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { openGlobalSnackbar } from '@/contexts/SnackbarContext'; // Asegúrate de que la ruta sea correcta
+import { openGlobalSnackbar } from '@/contexts/SnackbarContext';
 
+// Configura el primer cliente con la URL base principal
+const apiClientCms = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_CMS,
+    timeout: 10000,
+});
 
-
-
-const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // URL base de tu API
-    timeout: 10000, // tiempo de espera de 10 segundos
+// Configura el segundo cliente con la URL base para las noticias
+const apiClientNoticias = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_NOTICIAS,
+    timeout: 10000,
 });
 
 // apiClient.interceptors.request.use(
@@ -24,41 +28,54 @@ const apiClient = axios.create({
 // );
 
 // Interceptor global para manejar errores
-apiClient.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response) {
-            // El servidor respondió con un código de estado fuera del rango 2xx            
-            switch (error.response.status) {
-                case 400:
-                    // Manejar error 400 (Bad Request)
-
-                    openGlobalSnackbar(error.response.data.mensaje, 'warning');
-                    return Promise.reject({ status: 400, message: error.response.data });
-                case 401:
-                    // Manejar error 401 (Unauthorized)
-
-                    openGlobalSnackbar(error.response.data.mensaje, 'warning');
-                    return Promise.reject({ status: 401, message: error.response.data });
-                case 404:
-                    // Manejar error 404 (Not Found)
-                    openGlobalSnackbar(error.response.data.mensaje, 'warning');
-                    return Promise.reject({ status: 404, message: error.response.data });
-                default:
-
-                    // Otros errores de respuesta no manejados específicamente
-                    openGlobalSnackbar(error.response.data.mensaje,'warning');
-                    return Promise.reject({ status: error.response.status, message: 'Error en la solicitud.' });
-            }
-        } else if (error.request) {
-            // La solicitud fue hecha pero no se recibió respuesta
-            openGlobalSnackbar('Error de red. Inténtalo de nuevo más tarde.');
-            return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.' });
-        } else {
-            // Error antes de hacer la solicitud
-            openGlobalSnackbar('Error en la solicitud. Inténtalo de nuevo más tarde.');
-            return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.' });
+// Interceptor de manejo de errores utilizando un switch
+const errorHandler = (error) => {
+   
+    if (error.response) {
+        const { status, data } = error.response;
+        console.log(data)
+        const mensaje = data.mensaje || 'Error en la solicitud';
+        
+        switch (status) {
+            case 400:
+                openGlobalSnackbar(mensaje, 'warning');
+                break;
+            case 401:
+                openGlobalSnackbar(mensaje, 'error');
+                break;
+            case 404:
+                openGlobalSnackbar(mensaje, 'info');
+                break;
+            case 500:
+                openGlobalSnackbar(mensaje, 'error');
+                break;
+            default:
+                openGlobalSnackbar(mensaje, 'warning');
+                break;
         }
+        
+        return Promise.reject({ status, message: mensaje });
+    } else if (error.request) {
+        // No se recibió respuesta del servidor
+        openGlobalSnackbar('Error de red. Inténtalo de nuevo más tarde.', 'error');
+        return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.' });
+    } else {
+        // Error en la configuración de la solicitud
+        openGlobalSnackbar('Error en la solicitud. Inténtalo de nuevo más tarde.', 'warning');
+        return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.' });
     }
+};
+
+// Agregar el interceptor de respuesta en ambas instancias
+apiClientCms.interceptors.response.use(
+    response => response,
+    error => errorHandler(error) // Llamada directa a errorHandler para mayor claridad
 );
-export default apiClient;
+
+apiClientNoticias.interceptors.response.use(
+    response => response,
+    error => errorHandler(error) // Llamada directa a errorHandler para mayor claridad
+);
+
+// Exportar las instancias de axios
+export { apiClientCms, apiClientNoticias };

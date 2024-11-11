@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Typography, Dialog, IconButton, Tooltip, Card, CardContent } from '@mui/material';
 
-const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
+const VisorDeArchivos = ({ archivos=[], onSelect, selectedRecursoId }) => {
   
   const [currentFolder, setCurrentFolder] = useState('assets');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -28,7 +28,7 @@ const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
   };
 
   const folders = Array.from(new Set(
-    archivos
+    (Array.isArray(archivos) ? archivos : [])
       .filter(archivo => archivo.recursoEscritorio && archivo.recursoEscritorio.startsWith(`/${currentFolder}/`))
       .map(archivo => {
         const folderPath = getFolder(archivo.recursoEscritorio);
@@ -38,7 +38,7 @@ const VisorDeArchivos = ({ archivos, onSelect, selectedRecursoId }) => {
       .filter(Boolean)
   ));
 
-  const filteredArchivos = archivos.filter(
+  const filteredArchivos = (Array.isArray(archivos) ? archivos : []).filter(
     archivo => archivo.recursoEscritorio && getFolder(archivo.recursoEscritorio) === `/${currentFolder}`
   );
 

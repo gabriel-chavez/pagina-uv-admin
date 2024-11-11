@@ -26,6 +26,7 @@ import FormularioMenu from '@/components/Formularios/FormularioMenu';
 const fetchPaginasDinamicas = async () => {
     try {
         const paginas = await obtenerPaginas();
+        console.log(paginas)
         return paginas.datos;
     } catch (error) {
         return [];
@@ -192,7 +193,7 @@ const Pagina = () => {
     useEffect(() => {
         const cargarPaginas = async () => {
 
-            const paginas = await fetchPaginasDinamicas();
+            const paginas = await fetchPaginasDinamicas();            
             setListaDePaginasDinamicas(paginas); // Asignar el resultado al estado
 
         };

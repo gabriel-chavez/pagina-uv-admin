@@ -1,18 +1,16 @@
-import apiClient from '../config/api-config';
+import { apiClientCms } from '../config/api-config';
 /*PAGINAS DINAMICAS*/
 export const obtenerPaginas = async () => {
     try {
-        const response = await apiClient.get(`/api/PaginasDinamicas/`);
-        
+        const response = await apiClientCms.get(`/api/PaginasDinamicas/`);        
         return response.data;
-    } catch (error) {
-
+    } catch (error) {        
         throw error;
     }
 };
 export const obtenerPagina = async (id) => {
     try {
-        const response = await apiClient.get(`/api/PaginasDinamicas/${id}`);
+        const response = await apiClientCms.get(`/api/PaginasDinamicas/${id}`);
         return response.data;
     } catch (error) {
 
@@ -21,7 +19,7 @@ export const obtenerPagina = async (id) => {
 };
 export const actualizarPagina = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/PaginasDinamicas/${id}`, data);
+        const response = await apiClientCms.put(`/api/PaginasDinamicas/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -30,7 +28,7 @@ export const actualizarPagina = async (id, data) => {
 };
 export const crearPagina = async (data) => {
     try {
-        const response = await apiClient.post(`/api/PaginasDinamicas/`,data);
+        const response = await apiClientCms.post(`/api/PaginasDinamicas/`,data);
         return response.data;
     } catch (error) {
 
@@ -39,7 +37,7 @@ export const crearPagina = async (data) => {
 };
 export const eliminarPagina = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/PaginasDinamicas/${id}`);    
+        const response = await apiClientCms.delete(`/api/PaginasDinamicas/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -49,7 +47,7 @@ export const eliminarPagina = async (id) => {
 /*SECCIONES*/
 export const obtenerSecciones = async (id) => {
     try {
-        const response = await apiClient.get(`/api/Secciones/paginadinamica/${id}`);    
+        const response = await apiClientCms.get(`/api/Secciones/paginadinamica/${id}`);    
         return response.data;
     } catch (error) {      
         throw error;
@@ -59,7 +57,7 @@ export const obtenerSecciones = async (id) => {
 
 export const crearSeccion = async (data) => {
     try {
-        const response = await apiClient.post(`/api/Secciones/`,data);    
+        const response = await apiClientCms.post(`/api/Secciones/`,data);    
         return response.data;
     } catch (error) {
 
@@ -68,7 +66,7 @@ export const crearSeccion = async (data) => {
 };
 export const eliminarSeccion = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/Secciones/${id}`);    
+        const response = await apiClientCms.delete(`/api/Secciones/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -77,7 +75,7 @@ export const eliminarSeccion = async (id) => {
 };
 export const actualizarSeccion = async (id,data) => {
     try {
-        const response = await apiClient.put(`/api/Secciones/${id}`,data);    
+        const response = await apiClientCms.put(`/api/Secciones/${id}`,data);    
         return response.data;
     } catch (error) {
 
@@ -86,7 +84,7 @@ export const actualizarSeccion = async (id,data) => {
 };
 export const obtenerSeccion = async (id) => {
     try {
-        const response = await apiClient.get(`/api/Secciones/${id}`);    
+        const response = await apiClientCms.get(`/api/Secciones/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -96,7 +94,7 @@ export const obtenerSeccion = async (id) => {
 /*DATOS*/
 export const obtenerDatosPorSeccion = async (id) => {
     try {
-        const response = await apiClient.get(`/api/Datos/ObtenerDatosPorSeccionArray/${id}`);    
+        const response = await apiClientCms.get(`/api/Datos/ObtenerDatosPorSeccionArray/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -105,7 +103,7 @@ export const obtenerDatosPorSeccion = async (id) => {
 };
 export const crearDatos = async (data) => {
     try {
-        const response = await apiClient.post(`/api/Datos/`,data);    
+        const response = await apiClientCms.post(`/api/Datos/`,data);    
         return response.data;
     } catch (error) {
 
@@ -114,7 +112,7 @@ export const crearDatos = async (data) => {
 };
 export const actualizarDatos = async (id,data) => {
     try {
-        const response = await apiClient.put(`/api/Datos/${id}`,data);    
+        const response = await apiClientCms.put(`/api/Datos/${id}`,data);    
         return response.data;
     } catch (error) {
 
@@ -123,7 +121,7 @@ export const actualizarDatos = async (id,data) => {
 };
 export const eliminarDatos = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/Datos/${id}`);    
+        const response = await apiClientCms.delete(`/api/Datos/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -133,7 +131,7 @@ export const eliminarDatos = async (id) => {
 /*MENU*/
 export const obtenerMenu = async () => {
     try {
-        const response = await apiClient.get(`/api/MenuPrincipal/`);
+        const response = await apiClientCms.get(`/api/MenuPrincipal/`);
         return response.data;
     } catch (error) {
 
@@ -142,7 +140,7 @@ export const obtenerMenu = async () => {
 };
 export const actualizarMenu = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/MenuPrincipal/AsignarMenu/${id}`, data);
+        const response = await apiClientCms.put(`/api/MenuPrincipal/AsignarMenu/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -152,7 +150,7 @@ export const actualizarMenu = async (id, data) => {
 /*PARAMETRICAS*/
 export const obtenerTipoSeccion = async () => {
     try {
-        const response = await apiClient.get(`/api/CatTipoSeccion/`);
+        const response = await apiClientCms.get(`/api/CatTipoSeccion/`);
         return response.data;
     } catch (error) {
 
@@ -161,7 +159,7 @@ export const obtenerTipoSeccion = async () => {
 };
 export const obtenerTipoSeguro = async () => {
     try {
-        const response = await apiClient.get(`/api/CatTipoSeguro/`);
+        const response = await apiClientCms.get(`/api/CatTipoSeguro/`);
         return response.data;
     } catch (error) {
 
@@ -171,7 +169,7 @@ export const obtenerTipoSeguro = async () => {
 /*RECURSOS*/
 export const obtenerRecursos = async () => {
     try {
-        const response = await apiClient.get(`/api/Recurso/`);
+        const response = await apiClientCms.get(`/api/Recurso/`);
         return response.data;
     } catch (error) {
 
@@ -181,7 +179,7 @@ export const obtenerRecursos = async () => {
 /*BANNER PAGINA*/
 export const actualizarBannerPagina = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/BannerPaginaDinamicas/${id}`, data);
+        const response = await apiClientCms.put(`/api/BannerPaginaDinamicas/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -190,7 +188,7 @@ export const actualizarBannerPagina = async (id, data) => {
 };
 export const crearBannerPagina = async (data) => {
     try {
-        const response = await apiClient.post(`/api/BannerPaginaDinamicas/`,data);
+        const response = await apiClientCms.post(`/api/BannerPaginaDinamicas/`,data);
         return response.data;
     } catch (error) {
 
@@ -201,7 +199,7 @@ export const crearBannerPagina = async (data) => {
 /*SEGURO*/
 export const obtenerSeguros = async () => {
     try {
-        const response = await apiClient.get(`/api/Seguro/`);
+        const response = await apiClientCms.get(`/api/Seguro/`);
         return response.data;
     } catch (error) {
 
@@ -210,7 +208,7 @@ export const obtenerSeguros = async () => {
 };
 export const crearSeguro= async (data) => {
     try {
-        const response = await apiClient.post(`/api/Seguro/`,data);
+        const response = await apiClientCms.post(`/api/Seguro/`,data);
         return response.data;
     } catch (error) {
 
@@ -219,7 +217,7 @@ export const crearSeguro= async (data) => {
 };
 export const actualizarSeguro = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/Seguro/${id}`, data);
+        const response = await apiClientCms.put(`/api/Seguro/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -228,7 +226,7 @@ export const actualizarSeguro = async (id, data) => {
 };
 export const eliminarSeguro = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/Seguro/${id}`);    
+        const response = await apiClientCms.delete(`/api/Seguro/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -238,7 +236,7 @@ export const eliminarSeguro = async (id) => {
 /*PLAN*/
 export const obtenerPlanPorSeguro = async (id) => {
     try {
-        const response = await apiClient.get(`/api/Plan/ObtenerPorSeguro/${id}`);    
+        const response = await apiClientCms.get(`/api/Plan/ObtenerPorSeguro/${id}`);    
         return response.data;
     } catch (error) {      
         throw error;
@@ -247,7 +245,7 @@ export const obtenerPlanPorSeguro = async (id) => {
 };
 export const crearPlan= async (data) => {
     try {
-        const response = await apiClient.post(`/api/plan/`,data);
+        const response = await apiClientCms.post(`/api/plan/`,data);
         return response.data;
     } catch (error) {
 
@@ -256,7 +254,7 @@ export const crearPlan= async (data) => {
 };
 export const actualizarPlan = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/plan/${id}`, data);
+        const response = await apiClientCms.put(`/api/plan/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -265,7 +263,7 @@ export const actualizarPlan = async (id, data) => {
 };
 export const eliminarPlan = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/plan/${id}`);    
+        const response = await apiClientCms.delete(`/api/plan/${id}`);    
         return response.data;
     } catch (error) {
 
@@ -275,7 +273,7 @@ export const eliminarPlan = async (id) => {
 /*DETALLE SEGURO*/
 export const obtenerDetallePorSeguro = async (id) => {
     try {
-        const response = await apiClient.get(`/api/SeguroDetalle/ObtenerPorSeguro/${id}`);    
+        const response = await apiClientCms.get(`/api/SeguroDetalle/ObtenerPorSeguro/${id}`);    
         return response.data;
     } catch (error) {      
         throw error;
@@ -284,7 +282,7 @@ export const obtenerDetallePorSeguro = async (id) => {
 };
 export const crearDetalle= async (data) => {
     try {
-        const response = await apiClient.post(`/api/SeguroDetalle/`,data);
+        const response = await apiClientCms.post(`/api/SeguroDetalle/`,data);
         return response.data;
     } catch (error) {
 
@@ -293,7 +291,7 @@ export const crearDetalle= async (data) => {
 };
 export const actualizarDetalle = async (id, data) => {
     try {
-        const response = await apiClient.put(`/api/SeguroDetalle/${id}`, data);
+        const response = await apiClientCms.put(`/api/SeguroDetalle/${id}`, data);
         return response.data;
     } catch (error) {
 
@@ -302,7 +300,7 @@ export const actualizarDetalle = async (id, data) => {
 };
 export const eliminarDetalle = async (id) => {
     try {
-        const response = await apiClient.delete(`/api/SeguroDetalle/${id}`);    
+        const response = await apiClientCms.delete(`/api/SeguroDetalle/${id}`);    
         return response.data;
     } catch (error) {
 
