@@ -23,7 +23,7 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
             ...datosIniciales //copiar los datos 
         }
     });
-    const RecursoIdSeleccionado = watch('recursoId'); // Obtenemos el valor de recursoId usando watch
+    const RecursoIdSeleccionado = watch('recursoId'); // Obtenemos recursoId usando watch
 
     const [abrirConfirmacion, setAbrirConfirmacion] = useState(false);
     const [formData, setFormData] = useState(datosIniciales);
@@ -56,7 +56,7 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
         setAbrirConfirmacion(false);
     };
     const handleSeleccionarArchivo = (recursoId) => {
-        setValue('recursoId', recursoId); // Actualiza el valor de recursoId en el formulario
+        setValue('recursoId', recursoId); 
     };
 
     const handleConfirmar = async () => {
@@ -82,15 +82,15 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
                 open={abrirModal}
                 onClose={handleCerarModal}
                 aria-labelledby="form-dialog-title"
-                maxWidth="lg" // Controla el tamaño máximo del diálogo (lg, md, sm, xl, xs)
-                fullWidth // Hace que el diálogo ocupe el 100% del ancho máximo especificado
+                maxWidth="lg" 
+                fullWidth 
                 sx={{
                     '& .MuiDialog-paper': {
-                        width: '100%', // Ocupa el 100% del ancho en pantallas pequeñas
-                        maxWidth: '100%', // Asegura que no exceda el 100% en pantallas pequeñas
-                        '@media (min-width: 600px)': { // Para pantallas medianas y grandes
-                            width: '80%', // Ocupar el 80% del ancho en pantallas más grandes
-                            maxWidth: '600px' // Limitar el ancho máximo en pantallas grandes
+                        width: '100%', 
+                        maxWidth: '100%',
+                        '@media (min-width: 600px)': { 
+                            width: '80%', 
+                            maxWidth: '600px'
                         }
                     }
                 }}
@@ -110,7 +110,7 @@ const FormularioBanner = ({ abrirModal, cerrarModal, datosIniciales, confirmacio
                                 <VisorDeArchivos
                                     archivos={listaDeRecursos}
                                     onSelect={handleSeleccionarArchivo}
-                                    selectedRecursoId={RecursoIdSeleccionado} // Selección inicial basada en el valor de useForm
+                                    selectedRecursoId={RecursoIdSeleccionado}
                                 />
                             </div>
 

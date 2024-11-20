@@ -20,7 +20,7 @@ import { useSnackbar } from '@/contexts/SnackbarContext';
 import Editor from '@/utils/MdxEditor';
 import VisorDeArchivos from '@/utils/VisorDeArchivos';
 import router from 'next/router';
-import { obtenerCategoria, obtenerNoticias,obtenerRecursos,obtenerEstado,actualizarNoticia,crearNoticia,eliminarNoticia } from '@/services/noticiasService';
+import { obtenerCategoria, obtenerNoticias,obtenerRecursosNoticias,obtenerEstado,actualizarNoticia,crearNoticia,eliminarNoticia } from '@/services/noticiasService';
 
 
 const FormularioPrincipal = ({ abrirModal, cerrarModal, tituloModal, datosIniciales, confirmacion }) => {
@@ -54,7 +54,7 @@ const FormularioPrincipal = ({ abrirModal, cerrarModal, tituloModal, datosInicia
         
         const cargarRecursos = async () => {
             try {
-                const recursos = await obtenerRecursos();
+                const recursos = await obtenerRecursosNoticias();
    
                 setListaDeRecursos(recursos);
                 console.log("recursos")

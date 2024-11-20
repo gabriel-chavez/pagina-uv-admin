@@ -60,9 +60,9 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const user = {
-    name: 'Luis Chavez',
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: 'Project Manager'
+    name: 'Usuario',
+    avatar: '/static/images/avatars/3.jpg',
+    jobtitle: 'Administrador'
   };
 
   const ref = useRef<any>(null);
@@ -115,7 +115,7 @@ function HeaderUserbox() {
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
-        <List sx={{ p: 1 }} component="nav">
+        {/* <List sx={{ p: 1 }} component="nav">
           <NextLink href="/management/profile" passHref>
             <ListItem button>
               <AccountBoxTwoToneIcon fontSize="small" />
@@ -135,11 +135,11 @@ function HeaderUserbox() {
             </ListItem>
           </NextLink>
         </List>
-        <Divider />
+        <Divider /> */}
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            Cerrar sesión
           </Button>
         </Box>
       </Popover>

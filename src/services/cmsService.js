@@ -2,7 +2,8 @@ import { apiClientCms } from '../config/api-config';
 /*PAGINAS DINAMICAS*/
 export const obtenerPaginas = async () => {
     try {
-        const response = await apiClientCms.get(`/api/PaginasDinamicas/`);        
+        const response = await apiClientCms.get(`/api/PaginasDinamicas`);        
+        console.log(response)
         return response.data;
     } catch (error) {        
         throw error;
@@ -57,7 +58,7 @@ export const obtenerSecciones = async (id) => {
 
 export const crearSeccion = async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/Secciones/`,data);    
+        const response = await apiClientCms.post(`/api/Secciones`,data);    
         return response.data;
     } catch (error) {
 
@@ -103,7 +104,7 @@ export const obtenerDatosPorSeccion = async (id) => {
 };
 export const crearDatos = async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/Datos/`,data);    
+        const response = await apiClientCms.post(`/api/Datos`,data);    
         return response.data;
     } catch (error) {
 
@@ -131,7 +132,7 @@ export const eliminarDatos = async (id) => {
 /*MENU*/
 export const obtenerMenu = async () => {
     try {
-        const response = await apiClientCms.get(`/api/MenuPrincipal/`);
+        const response = await apiClientCms.get(`/api/MenuPrincipal`);
         return response.data;
     } catch (error) {
 
@@ -150,7 +151,7 @@ export const actualizarMenu = async (id, data) => {
 /*PARAMETRICAS*/
 export const obtenerTipoSeccion = async () => {
     try {
-        const response = await apiClientCms.get(`/api/CatTipoSeccion/`);
+        const response = await apiClientCms.get(`/api/CatTipoSeccion`);
         return response.data;
     } catch (error) {
 
@@ -159,7 +160,7 @@ export const obtenerTipoSeccion = async () => {
 };
 export const obtenerTipoSeguro = async () => {
     try {
-        const response = await apiClientCms.get(`/api/CatTipoSeguro/`);
+        const response = await apiClientCms.get(`/api/CatTipoSeguro`);
         return response.data;
     } catch (error) {
 
@@ -169,13 +170,44 @@ export const obtenerTipoSeguro = async () => {
 /*RECURSOS*/
 export const obtenerRecursos = async () => {
     try {
-        const response = await apiClientCms.get(`/api/Recurso/`);
+        const response = await apiClientCms.get(`/api/Recurso`);
         return response.data;
     } catch (error) {
 
         throw error;
     }
 };
+export const eliminarRecurso = async (id) => {
+    try {
+        const response = await apiClientCms.delete(`/api/Recurso/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+
+export const cargarRecurso = async (data) => {
+    try {
+        const formData = new FormData();            
+        Object.keys(data).forEach((key) => {
+            if (data[key] instanceof File || data[key] instanceof Blob) {
+                formData.append(key, data[key]); // Agregar archivos
+            } else {
+                formData.append(key, data[key]); // Agregar otros campos
+            }
+        });        
+        const response = await apiClientCms.post(`/api/Recurso`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data; 
+    } catch (error) {
+        throw error; 
+    }
+};
+
 /*BANNER PAGINA*/
 export const actualizarBannerPagina = async (id, data) => {
     try {
@@ -188,7 +220,7 @@ export const actualizarBannerPagina = async (id, data) => {
 };
 export const crearBannerPagina = async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/BannerPaginaDinamicas/`,data);
+        const response = await apiClientCms.post(`/api/BannerPaginaDinamicas`,data);
         return response.data;
     } catch (error) {
 
@@ -199,7 +231,7 @@ export const crearBannerPagina = async (data) => {
 /*SEGURO*/
 export const obtenerSeguros = async () => {
     try {
-        const response = await apiClientCms.get(`/api/Seguro/`);
+        const response = await apiClientCms.get(`/api/Seguro`);
         return response.data;
     } catch (error) {
 
@@ -208,7 +240,7 @@ export const obtenerSeguros = async () => {
 };
 export const crearSeguro= async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/Seguro/`,data);
+        const response = await apiClientCms.post(`/api/Seguro`,data);
         return response.data;
     } catch (error) {
 
@@ -245,7 +277,7 @@ export const obtenerPlanPorSeguro = async (id) => {
 };
 export const crearPlan= async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/plan/`,data);
+        const response = await apiClientCms.post(`/api/plan`,data);
         return response.data;
     } catch (error) {
 
@@ -282,7 +314,7 @@ export const obtenerDetallePorSeguro = async (id) => {
 };
 export const crearDetalle= async (data) => {
     try {
-        const response = await apiClientCms.post(`/api/SeguroDetalle/`,data);
+        const response = await apiClientCms.post(`/api/SeguroDetalle`,data);
         return response.data;
     } catch (error) {
 

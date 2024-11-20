@@ -203,7 +203,7 @@ const Pagina = () => {
     }, []); // El arreglo vacío asegura que se ejecute solo una vez, al montar el componente
 
 
-    const handleRedireccionarASecciones = (id) => {
+    const handleRedireccionarASecciones = (id) => {        
         router.push(`/paginas-dinamicas/secciones/${id}`);
     };
 

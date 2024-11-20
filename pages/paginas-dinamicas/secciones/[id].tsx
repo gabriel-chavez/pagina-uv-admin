@@ -61,7 +61,7 @@ export async function getServerSideProps(context) {
 }
 
 
-const Seccion = ({ tipoSeccion,datosPagina  }) => {
+const Seccion = ({ tipoSeccion,datosPagina  }) => {  
 
   const { openSnackbar } = useSnackbar();
   const [formData, setFormData] = useState(null);
@@ -84,6 +84,7 @@ const Seccion = ({ tipoSeccion,datosPagina  }) => {
   };
 
   useEffect(() => {
+
     if (paginaDinamicaId) {
       fetchSecciones();
     }

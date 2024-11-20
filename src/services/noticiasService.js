@@ -2,7 +2,7 @@ import {apiClientNoticias } from '../config/api-config';
 /*NOTICIAS*/
 export const obtenerNoticias = async () => {
   try {
-    const response = await apiClientNoticias.get(`/api/Noticia/`);
+    const response = await apiClientNoticias.get(`/api/Noticia`);
     return response.data;
   } catch (error) {
     throw error;
@@ -11,7 +11,7 @@ export const obtenerNoticias = async () => {
 
 export const crearNoticia = async (data) => {
   try {
-    const response = await apiClientNoticias.post(`/api/Noticia/`, data);    
+    const response = await apiClientNoticias.post(`/api/Noticia`, data);    
     return response.data;
   } catch (error) {
     throw error;
@@ -36,23 +36,16 @@ export const eliminarNoticia = async (id) => {
 
 export const obtenerCategoria = async () => {
   try {
-    const response = await apiClientNoticias.get(`/api/ParCategoria/`);
+    const response = await apiClientNoticias.get(`/api/ParCategoria`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-export const obtenerRecursos = async () => {
-  try {
-    const response = await apiClientNoticias.get(`/api/Recurso/`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 export const obtenerEstado = async () => {
   try {
-    const response = await apiClientNoticias.get(`/api/ParEstado/`);
+    const response = await apiClientNoticias.get(`/api/ParEstado`);
     return response.data;
   } catch (error) {
     throw error;
@@ -64,5 +57,47 @@ export const obtenerDetallePorNoticia = async (id) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+/*Recursos noticias*/
+export const obtenerRecursosNoticias = async () => {
+  try {
+      const response = await apiClientNoticias.get(`/api/Recursov2`);
+      console.log(response)
+      return response.data;
+  } catch (error) {
+
+      throw error;
+  }
+};
+export const eliminarRecursoNoticias = async (id) => {
+  try {
+      const response = await apiClientNoticias.delete(`/api/Recursov2/${id}`);    
+      return response.data;
+  } catch (error) {
+
+      throw error;
+  }
+};
+
+export const cargarRecursoNoticias = async (data) => {
+  try {
+      const formData = new FormData();            
+      Object.keys(data).forEach((key) => {
+          if (data[key] instanceof File || data[key] instanceof Blob) {
+              formData.append(key, data[key]); // Agregar archivos
+          } else {
+              formData.append(key, data[key]); // Agregar otros campos
+          }
+      });        
+      const response = await apiClientNoticias.post(`/api/Recursov2`, formData, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+          },
+      });
+      return response.data; 
+  } catch (error) {
+      throw error; 
   }
 };

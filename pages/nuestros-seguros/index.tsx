@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 
 import SidebarLayout from '@/layouts/SidebarLayout';
 
-import { Box, Button, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -353,7 +353,7 @@ const NuestrosSeguros = () => {
         router.push(`/nuestros-seguros/${id}`);
     };
 
- 
+
 
     const handleConfirmDeleteClose = () => {
         setOpenConfirmationDelete(false);
@@ -421,21 +421,19 @@ const NuestrosSeguros = () => {
                     }
                 />
             </PageTitleWrapper>
-            <Container maxWidth="lg">
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="stretch"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <TablaGenerica
-                            data={mappedData}
-                            actions={tableActions}
-                        />
-                    </Grid>
 
+            <Container maxWidth="lg">
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader title="Lista de seguros registrados" />
+                            <Divider />
+                            <TablaGenerica
+                                data={mappedData}
+                                actions={tableActions}
+                            />
+                        </Card>
+                    </Grid>
                 </Grid>
             </Container>
             <Footer />
