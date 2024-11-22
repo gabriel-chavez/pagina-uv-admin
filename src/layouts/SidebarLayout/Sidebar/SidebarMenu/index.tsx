@@ -305,6 +305,36 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
+
+        <List
+          component="div"
+          subheader={
+            <ListSubheader component="div" disableSticky>
+              Convocatorias
+            </ListSubheader>
+          }
+        >
+          <SubMenuWrapper>
+            <List component="div">
+              <ListItem component="div">
+                <NextLink href="/convocatorias" passHref>
+                  <Button
+                    className={
+                      currentRoute === '/convocatorias' ? 'active' : ''
+                    }
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<BallotTwoToneIcon />} // Puedes cambiar el icono según lo que necesites
+                  >
+                    Gestión de Convocatorias
+                  </Button>
+                </NextLink>
+              </ListItem>
+            </List>
+          </SubMenuWrapper>
+        </List>
+
       </MenuWrapper>
     </>
   );
