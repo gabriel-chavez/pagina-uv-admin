@@ -11,5 +11,9 @@ const redirects = {
     ];
   }
 };
-
+module.exports = {
+  experimental: {
+    middlewarePrefetch: true, 
+  },
+};
 module.exports = withImages(redirects);

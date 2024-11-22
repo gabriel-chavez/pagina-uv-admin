@@ -5,13 +5,11 @@ import { openGlobalSnackbar } from '@/contexts/SnackbarContext';
 const apiClientCms = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_CMS,
     timeout: 10000,
-});
-
-
-const apiClientNoticias = axios.create({
+  });
+  const apiClientNoticias = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_NOTICIAS,
     timeout: 10000,
-});
+  });
 
 // apiClient.interceptors.request.use(
 //   config => {
@@ -26,6 +24,16 @@ const apiClientNoticias = axios.create({
 //     return Promise.reject(error);
 //   }
 // );
+const addAuthToken = (config) => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+};
+
+apiClientCms.interceptors.request.use(addAuthToken, (error) => Promise.reject(error));
+apiClientNoticias.interceptors.request.use(addAuthToken, (error) => Promise.reject(error));
 
 // Interceptor global para manejar errores
 // Interceptor de manejo de errores utilizando un switch
@@ -35,7 +43,7 @@ const errorHandler = (error) => {
         const { status, data } = error.response;
         console.log(data)
         const mensaje = data.mensaje || 'Error en la solicitud';
-        
+
         switch (status) {
             case 400:
                 openGlobalSnackbar(mensaje, 'warning');
@@ -53,30 +61,28 @@ const errorHandler = (error) => {
                 openGlobalSnackbar(mensaje, 'warning');
                 break;
         }
-        
+
         return Promise.reject({ status, message: mensaje });
     } else if (error.request) {
-     
+
         openGlobalSnackbar('Error de red. Inténtalo de nuevo más tarde.', 'error');
         return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.' });
     } else {
-      
+
         openGlobalSnackbar('Error en la solicitud. Inténtalo de nuevo más tarde.', 'warning');
         return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.' });
     }
 };
 
-
-apiClientCms.interceptors.response.use(
-    response => response,
-    error => errorHandler(error) 
-);
-
-apiClientNoticias.interceptors.response.use(
-    response => response,
-    error => errorHandler(error) 
-);
-
+const configureInterceptors = (axiosInstance) => {
+    axiosInstance.interceptors.request.use(addAuthToken, (error) => Promise.reject(error));
+    axiosInstance.interceptors.response.use(
+        (response) => response,
+        (error) => errorHandler(error)
+    );
+};
+configureInterceptors(apiClientCms);
+configureInterceptors(apiClientNoticias);
 
 
 
