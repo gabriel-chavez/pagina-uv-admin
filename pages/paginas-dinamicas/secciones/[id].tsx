@@ -69,7 +69,7 @@ const Seccion = ({ tipoSeccion,datosPagina  }) => {
   const [secciones, setSecciones] = useState([]);
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { id: paginaDinamicaId } = router.query; // Obtener el parámetro de la ruta
+  const { id: paginaDinamicaId } = router.query; 
   const [dialogTitle, setDialogTitle] = useState('Crear');
   const [openConfirmacionEliminacion, setOpenConfirmacionEliminacion] = useState(false);
   const [idAEliminar, setIdAEliminar] = useState<number | null>(null);
