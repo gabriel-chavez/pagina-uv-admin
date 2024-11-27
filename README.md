@@ -4,7 +4,7 @@
     </a>
 </p>
 <h1 align="center">
-    <b>Tokyo Free White Typescript Next.js Admin Dashboard</b>
+    <b>Admin</b>
     <br>
     <a href="https://twitter.com/intent/tweet?url=https://bloomui.com&text=I like this Next.js admin dashboard">
         <img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social" />
