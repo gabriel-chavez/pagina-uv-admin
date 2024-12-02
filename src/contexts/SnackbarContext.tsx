@@ -70,6 +70,7 @@ export const useSnackbar = (): SnackbarContextType => {
 
 // Función global para usar en Axios
 export const openGlobalSnackbar = (message: string, severity: AlertColor = 'error') => {
+    
     if (snackbarInstance) {
         snackbarInstance.openSnackbar(message, severity);
     }

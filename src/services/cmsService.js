@@ -9,12 +9,14 @@ export const obtenerPaginas = async () => {
         throw error;
     }
 };
-export const obtenerPagina = async (id) => {
+export const obtenerPagina = async (id,cookies = '') => {
     try {
-        const response = await apiClientCms.get(`/api/PaginasDinamicas/${id}`);
+        const response = await apiClientCms.get(`/api/PaginasDinamicas/${id}`,{
+            headers: cookies ? { Cookie: cookies } : {}
+        });
         return response.data;
     } catch (error) {
-
+        
         throw error;
     }
 };
@@ -149,12 +151,13 @@ export const actualizarMenu = async (id, data) => {
     }
 };
 /*PARAMETRICAS*/
-export const obtenerTipoSeccion = async () => {
-    try {
-        const response = await apiClientCms.get(`/api/CatTipoSeccion`);
+export const obtenerTipoSeccion = async (cookies = '') => {
+    try {        
+        const response = await apiClientCms.get('/api/CatTipoSeccion', {
+            headers: cookies ? { Cookie: cookies } : {} 
+        });
         return response.data;
     } catch (error) {
-
         throw error;
     }
 };

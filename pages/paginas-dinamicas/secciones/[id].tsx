@@ -37,10 +37,11 @@ import ImageGallerySelect from '@/utils/ImageGallerySelect ';
 
 export async function getServerSideProps(context) {
   try {
-    const response = await obtenerTipoSeccion();
+    const cookies = context.req.headers.cookie || '';
+    const response = await obtenerTipoSeccion(cookies);
     const tipoSeccion = response.datos;
     const { id: paginaDinamicaId } = context.query;
-    const response2 = await obtenerPagina(paginaDinamicaId);
+    const response2 = await obtenerPagina(paginaDinamicaId,cookies);
     console.log(response2)
     const datosPagina = response2.datos;
 

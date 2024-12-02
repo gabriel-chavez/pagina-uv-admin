@@ -1,29 +1,31 @@
-import Cookies from 'js-cookie';
-import { apiClientCms } from './axiosConfig';
+import { apiClientCms } from '../config/api-config';
 
-export const login = async (email, password) => {
+export const login = async (UserName, Password) => {
   try {
-    const response = await apiClientCms.post('/auth/login', {
-      email,
-      password,
+    const response = await apiClientCms.post('/api/auth/login', {
+      UserName,
+      Password,
+    }, {
+      withCredentials: true // Habilita el envío de cookies
     });
 
-    const { token } = response.data;
+    console.log('Response:', response);
+    console.log('Response Data:', response.data);
+    console.log('Response Headers:', response.headers);
 
-    
-    Cookies.set('jwt', token, {
-      expires: 7, 
-      secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción
-      sameSite: 'strict',
-    });
+    return response.data;
 
-    return token;
   } catch (error) {
     console.error('Error during login:', error);
     throw error;
   }
 };
+export const cerrarSesion = async () => {
+  try {
+    const response = await apiClientCms.post('/api/auth/logout');
+    console.log(response.data.message); 
 
-export const logout = () => {
-  Cookies.remove('jwt');
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error);
+  }
 };
