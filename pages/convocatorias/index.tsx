@@ -66,13 +66,13 @@ const Convocatorias = () => {
             setConvocatorias([]);
         }
     };
-    // useEffect(() => {
-    //     fetchConvocatorias();
-    // }, []);
-
     useEffect(() => {
-        setConvocatorias(convocatoriasMock);
+        fetchConvocatorias();
     }, []);
+
+    // useEffect(() => {
+    //     setConvocatorias(convocatoriasMock);
+    // }, []);
 
     const handleAbrirModalAgregarEditar = (id: number | null = null) => {
         if (id !== null) {
