@@ -22,6 +22,8 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import { useRouter } from 'next/router';
+import { cerrarSesion } from '@/services/authService';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -59,6 +61,16 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+  const router = useRouter();
+  const logout = async () => {
+    try {        
+        await cerrarSesion();
+                
+        router.push('/login');
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);        
+    }
+};
   const user = {
     name: 'Usuario',
     avatar: '/static/images/avatars/3.jpg',
@@ -137,7 +149,7 @@ function HeaderUserbox() {
         </List>
         <Divider /> */}
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={logout}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Cerrar sesión
           </Button>

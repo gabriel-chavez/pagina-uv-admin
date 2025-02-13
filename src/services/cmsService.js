@@ -9,12 +9,14 @@ export const obtenerPaginas = async () => {
         throw error;
     }
 };
-export const obtenerPagina = async (id) => {
+export const obtenerPagina = async (id,cookies = '') => {
     try {
-        const response = await apiClientCms.get(`/api/PaginasDinamicas/${id}`);
+        const response = await apiClientCms.get(`/api/PaginasDinamicas/${id}`,{
+            headers: cookies ? { Cookie: cookies } : {}
+        });
         return response.data;
     } catch (error) {
-
+        
         throw error;
     }
 };
@@ -149,12 +151,13 @@ export const actualizarMenu = async (id, data) => {
     }
 };
 /*PARAMETRICAS*/
-export const obtenerTipoSeccion = async () => {
-    try {
-        const response = await apiClientCms.get(`/api/CatTipoSeccion`);
+export const obtenerTipoSeccion = async (cookies = '') => {
+    try {        
+        const response = await apiClientCms.get('/api/CatTipoSeccion', {
+            headers: cookies ? { Cookie: cookies } : {} 
+        });
         return response.data;
     } catch (error) {
-
         throw error;
     }
 };
@@ -339,3 +342,116 @@ export const eliminarDetalle = async (id) => {
         throw error;
     }
 };
+/*PAGINA PRINCIPAL BANNER*/
+export const obtenerBannerPrincipalMaestro = async () => {
+    try {
+        const response = await apiClientCms.get(`/api/BannerPaginaPrincipalMaestro`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const crearBannerPrincipalMaestro= async (data) => {
+    try {
+        const response = await apiClientCms.post(`/api/BannerPaginaPrincipalMaestro`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const actualizarBannerPrincipalMaestro = async (id, data) => {
+    try {
+        const response = await apiClientCms.put(`/api/BannerPaginaPrincipalMaestro/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const eliminarBannerPrincipalMaestro = async (id) => {
+    try {
+        const response = await apiClientCms.delete(`/api/BannerPaginaPrincipalMaestro/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/*Catalogo para banner principal */
+export const obtenerCatTipoBannerPaginaPrincipal = async () => {
+    try {
+        const response = await apiClientCms.get(`/api/CatTipoBannerPaginaPrincipal`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerCatEstiloBanner = async () => {
+    try {
+        const response = await apiClientCms.get(`/api/CatEstiloBanner`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const ListarBannerPrincipalDetalle = async () => {
+    try {
+        const response = await apiClientCms.get(`/api/BannerPaginaPrincipalDetalle`);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerBannerPrincipalDetalle = async (id) => {
+    try {
+        const response = await apiClientCms.get(`/api/BannerPaginaPrincipalDetalle/${id}`);
+        
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const obtenerBannerPorMaestro = async (maestroId) => {
+    try {
+        const response = await apiClientCms.get(`/api/BannerPaginaPrincipalDetalle/obtenerPorMaestro/${maestroId}`);
+        
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const crearBannerPrincipalDetalle= async (data) => {
+    try {
+        const response = await apiClientCms.post(`/api/BannerPaginaPrincipalDetalle`,data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const actualizarBannerPrincipalDetalle = async (id, data) => {
+    try {
+        const response = await apiClientCms.put(`/api/BannerPaginaPrincipalDetalle/${id}`, data);
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+export const eliminarBannerPrincipalDetalle = async (id) => {
+    try {
+        const response = await apiClientCms.delete(`/api/BannerPaginaPrincipalDetalle/${id}`);    
+        return response.data;
+    } catch (error) {
+
+        throw error;
+    }
+};
+/****/

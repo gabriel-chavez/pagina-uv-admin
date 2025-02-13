@@ -37,10 +37,11 @@ import ImageGallerySelect from '@/utils/ImageGallerySelect ';
 
 export async function getServerSideProps(context) {
   try {
-    const response = await obtenerTipoSeccion();
+    const cookies = context.req.headers.cookie || '';
+    const response = await obtenerTipoSeccion(cookies);
     const tipoSeccion = response.datos;
     const { id: paginaDinamicaId } = context.query;
-    const response2 = await obtenerPagina(paginaDinamicaId);
+    const response2 = await obtenerPagina(paginaDinamicaId,cookies);
     console.log(response2)
     const datosPagina = response2.datos;
 
@@ -69,7 +70,7 @@ const Seccion = ({ tipoSeccion,datosPagina  }) => {
   const [secciones, setSecciones] = useState([]);
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { id: paginaDinamicaId } = router.query; // Obtener el parámetro de la ruta
+  const { id: paginaDinamicaId } = router.query; 
   const [dialogTitle, setDialogTitle] = useState('Crear');
   const [openConfirmacionEliminacion, setOpenConfirmacionEliminacion] = useState(false);
   const [idAEliminar, setIdAEliminar] = useState<number | null>(null);

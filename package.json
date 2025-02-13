@@ -28,6 +28,8 @@
     "context-api": "0.0.2",
     "date-fns": "2.28.0",
     "jspdf": "^2.5.2",
+    "jose": "^5.9.6",
+    "js-cookie": "^3.0.5",
     "mdx-bundler": "^10.0.2",
     "next": "^15.0.3",
     "next-images": "1.8.4",

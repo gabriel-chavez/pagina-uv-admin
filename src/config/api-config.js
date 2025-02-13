@@ -1,34 +1,21 @@
 import axios from 'axios';
 import { openGlobalSnackbar } from '@/contexts/SnackbarContext';
-
+import Cookies from 'js-cookie'; 
 
 const apiClientCms = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_CMS,
     timeout: 10000,
+    withCredentials: true
 });
 
 
 const apiClientNoticias = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_NOTICIAS,
     timeout: 10000,
+    withCredentials: true
 });
 
-// apiClient.interceptors.request.use(
-//   config => {
-//     // Puedes agregar configuraciones adicionales aquí, como headers
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error);
-//   }
-// );
 
-// Interceptor global para manejar errores
-// Interceptor de manejo de errores utilizando un switch
 const errorHandler = (error) => {
     console.error(error)
     if (error.response) {
