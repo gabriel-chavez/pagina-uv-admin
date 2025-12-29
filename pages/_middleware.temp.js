@@ -35,5 +35,6 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/:path*"], // Protege todas las rutas
+ // matcher: ["/:path*"], // Protege todas las rutas
+ matcher: [],
 };
